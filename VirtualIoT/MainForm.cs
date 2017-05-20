@@ -15,6 +15,7 @@ namespace VirtualIoT
     public partial class MainForm : Form
     {
         private ServerComm _serverComm = ServerComm.Instance;
+        private List<DeviceInfo> _devices = new List<DeviceInfo>();
         public MainForm()
         {
             InitializeComponent();
@@ -27,7 +28,8 @@ namespace VirtualIoT
             {
                 email = emailTb.Text,
                 module_type = deviceCb.SelectedIndex,
-                setup_time = (int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds
+                setup_time = (int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
+                friendly_name = friendlyTb.Text
             });
             var result = await _serverComm.PutAsync(_serverComm.Root + "/device/register", 
                 new StringContent(info), "application/json");
@@ -40,6 +42,18 @@ namespace VirtualIoT
             var jsonStr = await result.Item2.Content.ReadAsStringAsync();
             DeviceInfo deviceObj = JsonConvert.DeserializeObject<DeviceInfo>(jsonStr);
             Console.WriteLine(deviceObj.token);
+            deviceObj.module_type = deviceCb.SelectedIndex;
+            deviceObj.FriendlyName = friendlyTb.Text;
+            _devices.Add(deviceObj);
+            RegisteredDevicesCb.Items.Clear();
+            foreach (var dev in _devices)
+            {
+                RegisteredDevicesCb.Items.Add(dev.FriendlyName);
+            }
+            // add here a list of all registered devices on that list link the recieved object 
+            //to the list object so that each item has its correct token etc
+            //user can then select from the list and click emulate to load new form.
+
         }
 
         private async void MainForm_LoadAsync(object sender, EventArgs e)
@@ -57,7 +71,7 @@ namespace VirtualIoT
 
         private void deviceCb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (emailTb.Text == "" || deviceCb.SelectedIndex <= 0)
+            if (emailTb.Text == "" || deviceCb.SelectedIndex <= 0 || friendlyTb.Text == "")
             {
                 registerBtn.Enabled = false;
                 emailStatusLbl.Text = emailTb.Text == "" ? "Enter an email please" : "";
@@ -71,7 +85,7 @@ namespace VirtualIoT
 
         private void emailTb_TextChanged(object sender, EventArgs e)
         {
-            if(emailTb.Text == "" || deviceCb.SelectedIndex <= 0)
+            if(emailTb.Text == "" || deviceCb.SelectedIndex <= 0 || friendlyTb.Text == "")
             {
                 registerBtn.Enabled = false;
                 emailStatusLbl.Text = emailTb.Text == "" ? "Enter an email please" : "";
@@ -80,6 +94,31 @@ namespace VirtualIoT
             {
                 registerBtn.Enabled = true;
                 emailStatusLbl.Text = "";
+            }
+        }
+
+        private void emailStatusLbl_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void powerBtn_Click(object sender, EventArgs e)
+        {
+            var selectedDevice = _devices[RegisteredDevicesCb.SelectedIndex];
+            switch (selectedDevice.module_type)
+            {
+                case 1:
+                    //add SmartPlug
+                    break;
+                case 4:
+                    // add USB form here
+                    break;
+                case 5:
+                    // add infrared for m here
+                    break;
+                case 7:
+                    new AudioEmulate(selectedDevice).Show();
+                    break;
             }
         }
     }
