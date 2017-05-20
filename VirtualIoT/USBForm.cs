@@ -10,27 +10,26 @@ using System.Windows.Forms;
 
 namespace VirtualIoT
 {
-    public partial class AudioEmulate : Form
+    public partial class USBForm : Form
     {
-        public AudioEmulate(DeviceInfo device)
+        public USBForm(DeviceInfo device)
         {
             InitializeComponent();
         }
 
-        private void AudioEmulate_Load(object sender, EventArgs e)
+        private void USB_Load(object sender, EventArgs e)
         {
 
         }
 
-        private void startBtn_Click(object sender, EventArgs e)
+        private void currentHsb_Scroll(object sender, ScrollEventArgs e)
         {
-           
+            currentLbl.Text = "Current: " + currentHsb.Value / 100.0 + "A";
         }
 
-        private void stopBtn_Click(object sender, EventArgs e)
+        private void currentLbl_Click(object sender, EventArgs e)
         {
 
         }
-
     }
 }

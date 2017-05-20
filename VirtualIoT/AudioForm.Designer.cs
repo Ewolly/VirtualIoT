@@ -1,6 +1,6 @@
 ﻿namespace VirtualIoT
 {
-    partial class AudioEmulate
+    partial class AudioForm
     {
         /// <summary>
         /// Required designer variable.
@@ -32,6 +32,8 @@
             this.speakerCb = new System.Windows.Forms.CheckBox();
             this.startBtn = new System.Windows.Forms.Button();
             this.stopBtn = new System.Windows.Forms.Button();
+            this.currentLbl = new System.Windows.Forms.Label();
+            this.currentHsb = new System.Windows.Forms.HScrollBar();
             this.SuspendLayout();
             // 
             // micCb
@@ -56,7 +58,7 @@
             // 
             // startBtn
             // 
-            this.startBtn.Location = new System.Drawing.Point(46, 97);
+            this.startBtn.Location = new System.Drawing.Point(134, 121);
             this.startBtn.Name = "startBtn";
             this.startBtn.Size = new System.Drawing.Size(75, 23);
             this.startBtn.TabIndex = 1;
@@ -66,7 +68,7 @@
             // 
             // stopBtn
             // 
-            this.stopBtn.Location = new System.Drawing.Point(46, 144);
+            this.stopBtn.Location = new System.Drawing.Point(134, 168);
             this.stopBtn.Name = "stopBtn";
             this.stopBtn.Size = new System.Drawing.Size(75, 23);
             this.stopBtn.TabIndex = 2;
@@ -74,16 +76,37 @@
             this.stopBtn.UseVisualStyleBackColor = true;
             this.stopBtn.Click += new System.EventHandler(this.stopBtn_Click);
             // 
-            // AudioEmulate
+            // currentLbl
+            // 
+            this.currentLbl.AutoSize = true;
+            this.currentLbl.Location = new System.Drawing.Point(228, 331);
+            this.currentLbl.Name = "currentLbl";
+            this.currentLbl.Size = new System.Drawing.Size(72, 13);
+            this.currentLbl.TabIndex = 5;
+            this.currentLbl.Text = "Current Draw:";
+            this.currentLbl.Click += new System.EventHandler(this.currentLbl_Click);
+            // 
+            // currentHsb
+            // 
+            this.currentHsb.Location = new System.Drawing.Point(105, 290);
+            this.currentHsb.Maximum = 1009;
+            this.currentHsb.Name = "currentHsb";
+            this.currentHsb.Size = new System.Drawing.Size(328, 17);
+            this.currentHsb.TabIndex = 4;
+            this.currentHsb.Scroll += new System.Windows.Forms.ScrollEventHandler(this.currentHsb_Scroll);
+            // 
+            // AudioForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(537, 397);
+            this.Controls.Add(this.currentLbl);
+            this.Controls.Add(this.currentHsb);
             this.Controls.Add(this.stopBtn);
             this.Controls.Add(this.startBtn);
             this.Controls.Add(this.speakerCb);
             this.Controls.Add(this.micCb);
-            this.Name = "AudioEmulate";
+            this.Name = "AudioForm";
             this.Text = "AudioEmulate";
             this.Load += new System.EventHandler(this.AudioEmulate_Load);
             this.ResumeLayout(false);
@@ -97,5 +120,7 @@
         private System.Windows.Forms.CheckBox speakerCb;
         private System.Windows.Forms.Button startBtn;
         private System.Windows.Forms.Button stopBtn;
+        private System.Windows.Forms.Label currentLbl;
+        private System.Windows.Forms.HScrollBar currentHsb;
     }
 }

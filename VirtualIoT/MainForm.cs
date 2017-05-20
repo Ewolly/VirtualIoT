@@ -108,16 +108,16 @@ namespace VirtualIoT
             switch (selectedDevice.module_type)
             {
                 case 1:
-                    //add SmartPlug
+                    new SmartPlugForm(selectedDevice).Show();
+                    break;
+                case 3:
+                    new USBForm(selectedDevice).Show();
                     break;
                 case 4:
-                    // add USB form here
-                    break;
-                case 5:
-                    // add infrared for m here
+                    new InfraredForm(selectedDevice).Show();
                     break;
                 case 7:
-                    new AudioEmulate(selectedDevice).Show();
+                    new AudioForm(selectedDevice).Show();
                     break;
             }
         }

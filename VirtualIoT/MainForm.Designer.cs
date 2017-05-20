@@ -64,7 +64,7 @@
             this.emailTb.Name = "emailTb";
             this.emailTb.Size = new System.Drawing.Size(121, 20);
             this.emailTb.TabIndex = 3;
-            this.emailTb.Text = "hunter2@example.com";
+            this.emailTb.Text = "hunter3@example.com";
             this.emailTb.TextChanged += new System.EventHandler(this.emailTb_TextChanged);
             // 
             // emailStatusLbl
@@ -98,6 +98,7 @@
             // friendlyTb
             // 
             this.friendlyTb.Location = new System.Drawing.Point(22, 117);
+            this.friendlyTb.MaxLength = 15;
             this.friendlyTb.Name = "friendlyTb";
             this.friendlyTb.Size = new System.Drawing.Size(121, 20);
             this.friendlyTb.TabIndex = 3;
