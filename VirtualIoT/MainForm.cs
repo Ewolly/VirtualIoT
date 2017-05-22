@@ -67,6 +67,49 @@ namespace VirtualIoT
             }
             var jsonStr = await result.Item2.Content.ReadAsStringAsync();
             deviceCb.Items.AddRange(JsonConvert.DeserializeObject<string[]>(jsonStr));
+            
+            //
+            // Temp VAribales Below so we dont have to clog up jamies precious database constantly
+            //
+            var device1 = new DeviceInfo()
+            {
+                device_id = 71,
+                token = "80dcb628-9dea-46eb-aacc-1c5ee71230cd",
+                FriendlyName = "Jamieporno",
+                module_type = 7
+            };
+            var device2 = new DeviceInfo()
+            {
+                device_id = 90,
+                token = "759666a2-ed14-4274-8a1f-071653fa9d2d",
+                FriendlyName = "JamiesTV",
+                module_type = 4
+            };
+            var device3 = new DeviceInfo()
+            {
+                device_id = 92,
+                token = "0ad42527-69df-4927-bbe8-e8eba186636a",
+                FriendlyName = "JamiesLamp",
+                module_type = 1
+            };
+            var device4 = new DeviceInfo()
+            {
+                device_id = 91,
+                token = "2e903937-dc68-493c-b22f-7144a2ed0b61",
+                FriendlyName = "JamiesVibrator",
+                module_type = 3
+            };
+            RegisteredDevicesCb.Items.Add(device1.FriendlyName);
+            _devices.Add(device1);
+            RegisteredDevicesCb.Items.Add(device2.FriendlyName);
+            _devices.Add(device2);
+            RegisteredDevicesCb.Items.Add(device3.FriendlyName);
+            _devices.Add(device3);
+            RegisteredDevicesCb.Items.Add(device4.FriendlyName);
+            _devices.Add(device4);
+            //
+            // Temp VAribales above so we dont have to clog up jamies precious database constantly
+            //
         }
 
         private void deviceCb_SelectedIndexChanged(object sender, EventArgs e)

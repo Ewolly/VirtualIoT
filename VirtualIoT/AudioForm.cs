@@ -44,11 +44,20 @@ namespace VirtualIoT
         private void currentHsb_Scroll(object sender, ScrollEventArgs e)
         {
             currentLbl.Text = "Current: " + currentHsb.Value / 100.0 + "A";
+            _device.SendKeepalive(_sslStream, currentHsb.Value);
         }
 
         private void currentLbl_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void sendCommandBtn_Click(object sender, EventArgs e)
+        {
+            _sslStream.Write(Encoding.UTF8.GetBytes(inputTxtBox.Text + "\r\n"));
+            //byte[] buffer = new byte[128];
+            //_sslStream.Read(buffer, 0, 128);
+            //outputTxtBox.AppendText(Encoding.UTF8.GetString(buffer));
         }
     }
 }

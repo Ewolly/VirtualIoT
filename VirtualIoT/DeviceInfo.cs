@@ -16,19 +16,17 @@ namespace VirtualIoT
         public string device_url { get; set; }
         public string token { get; set; }
         public string FriendlyName { get; set; }
-        TcpClient _tcpClient;
-        SslStream _sslStream;
+
         public DeviceInfo()
         {
-            
         }
 
         public SslStream CreateSocket()
         {
-            _tcpClient = new TcpClient("iot.duality.co.nz", 7777);
-            _sslStream = new SslStream(_tcpClient.GetStream());
+            TcpClient tcpClient = new TcpClient("iot.duality.co.nz", 7777);
+            SslStream sslStream = new SslStream(tcpClient.GetStream());
 
-            _sslStream.AuthenticateAsClient("iot.duality.co.nz");
+            sslStream.AuthenticateAsClient("iot.duality.co.nz");
             byte[] action = Encoding.UTF8.GetBytes(
                 JsonConvert.SerializeObject(
                     new Dictionary<string, object>
@@ -36,23 +34,37 @@ namespace VirtualIoT
                         {"id", device_id },
                         {"token", token }
                     }) + "\r\n");
-            _sslStream.Write(action, 0, action.Length);
+            sslStream.Write(action, 0, action.Length);
 
             byte[] buffer = new byte[128];
-            _sslStream.Read(buffer, 0, buffer.Length);
-            var response = JsonConvert.DeserializeObject<Dictionary<string, string>>(Encoding.UTF8.GetString(buffer));
+            sslStream.Read(buffer, 0, buffer.Length);
+            var response = JsonConvert.DeserializeObject<Dictionary<string, string>>(
+                Encoding.UTF8.GetString(buffer));
             if(response.ContainsKey("info")) 
-                return _sslStream;
+                return sslStream;
             return null;
         }
 
-        public void sendCurrent(int current)
+        public void SendKeepalive(SslStream sslStream, int curr)
         {
-            { "action": "keepalive",
-              "args": {
-                    "current_consumption": current
+            float current = curr / 100;
+            var currentCommand = new Dictionary<string, object>
+            {
+                {"action", "keepalive" },
+                {"args", new Dictionary<string, float>
+                    {
+                        { "current_consumption", current }
+                    }
                 }
-            }
+            };
+            ConvertAndSend(sslStream, currentCommand);
+        }
+
+        public void ConvertAndSend(SslStream sslStream, object message)
+        {
+            byte[] action = Encoding.UTF8.GetBytes(
+                JsonConvert.SerializeObject(message) + "\r\n");
+            sslStream.Write(action, 0, action.Length);
         }
     }
 }
