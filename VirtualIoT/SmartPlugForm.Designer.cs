@@ -31,6 +31,7 @@
             this.powerCb = new System.Windows.Forms.CheckBox();
             this.currentLbl = new System.Windows.Forms.Label();
             this.currentHsb = new System.Windows.Forms.HScrollBar();
+            this.outputTb = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // powerCb
@@ -65,11 +66,21 @@
             this.currentHsb.TabIndex = 4;
             this.currentHsb.Scroll += new System.Windows.Forms.ScrollEventHandler(this.currentHsb_Scroll);
             // 
+            // outputTb
+            // 
+            this.outputTb.AutoSize = true;
+            this.outputTb.Location = new System.Drawing.Point(13, 287);
+            this.outputTb.Name = "outputTb";
+            this.outputTb.Size = new System.Drawing.Size(39, 13);
+            this.outputTb.TabIndex = 6;
+            this.outputTb.Text = "Output";
+            // 
             // SmartPlugForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(452, 312);
+            this.Controls.Add(this.outputTb);
             this.Controls.Add(this.currentLbl);
             this.Controls.Add(this.currentHsb);
             this.Controls.Add(this.powerCb);
@@ -86,5 +97,6 @@
         private System.Windows.Forms.CheckBox powerCb;
         private System.Windows.Forms.Label currentLbl;
         private System.Windows.Forms.HScrollBar currentHsb;
+        private System.Windows.Forms.Label outputTb;
     }
 }

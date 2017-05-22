@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,14 +13,22 @@ namespace VirtualIoT
 {
     public partial class AudioForm : Form
     {
+        SslStream _sslStream;
+        DeviceInfo _device;
         public AudioForm(DeviceInfo device)
         {
             InitializeComponent();
+            _device = device;
         }
 
         private void AudioEmulate_Load(object sender, EventArgs e)
         {
-
+            _sslStream = _device.CreateSocket();
+            if(_sslStream == null)
+            {
+                MessageBox.Show("Connection Failed");
+                this.Close();
+            }
         }
 
         private void startBtn_Click(object sender, EventArgs e)
