@@ -47,13 +47,12 @@ namespace VirtualIoT
 
         public void SendKeepalive(SslStream sslStream, int curr)
         {
-            double current = curr / 100.0;
             var currentCommand = new Dictionary<string, object>
             {
                 {"action", "keepalive" },
-                {"args", new Dictionary<string, double>
+                {"kwargs", new Dictionary<string, int>
                     {
-                        { "current_consumption", current }
+                        { "current_consumption", curr }
                     }
                 }
             };

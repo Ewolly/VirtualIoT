@@ -15,7 +15,8 @@ namespace VirtualIoT
     {
         SslStream _sslStream;
         DeviceInfo _device;
-        private System.Windows.Forms.Timer _timer;
+        private Timer _timer;
+        private Timer _checkRespTimer;
         public AudioForm(DeviceInfo device)
         {
             InitializeComponent();
@@ -31,11 +32,36 @@ namespace VirtualIoT
                 this.Close();
             }
             //start timer
-            _timer = new System.Windows.Forms.Timer();
-            _timer.Interval = 2000;
-            _timer.Tick += updateTimer;
+            _timer = new Timer()
+            {
+                Interval = 2000
+            };
+            _timer.Tick += UpdateTimer;
             _timer.Start();
-            updateTimer(null, null);
+
+            _checkRespTimer = new Timer()
+            {
+                Interval = 200
+            };
+            _checkRespTimer.Tick += UpdateResponseBox;
+            _checkRespTimer.Start();
+        }
+
+        private void UpdateResponseBox(object sender, EventArgs e)
+        {
+            var old_timeout = _sslStream.ReadTimeout;
+            _sslStream.ReadTimeout = 10;
+            var buffer = new byte[128];
+            try
+            {
+                int x = _sslStream.Read(buffer, 0, 128);
+                outputTxtBox.AppendText(Encoding.ASCII.GetString(buffer, 0, x));
+            }
+            catch { }
+            finally
+            {
+                _sslStream.ReadTimeout = old_timeout;
+            }
         }
 
         private void startBtn_Click(object sender, EventArgs e)
@@ -50,7 +76,7 @@ namespace VirtualIoT
 
         private void currentHsb_Scroll(object sender, ScrollEventArgs e)
         {
-            currentLbl.Text = "Current: " + currentHsb.Value / 100.0 + "A";
+            currentLbl.Text = "Current: " + currentHsb.Value + "mA";
         }
 
         private void currentLbl_Click(object sender, EventArgs e)
@@ -60,13 +86,18 @@ namespace VirtualIoT
 
         private void sendCommandBtn_Click(object sender, EventArgs e)
         {
-            _sslStream.Write(Encoding.UTF8.GetBytes(inputTxtBox.Text + "\r\n"));
-            byte[] buffer = new byte[128];
-            _sslStream.Read(buffer, 0, 128);
-            outputTxtBox.AppendText(Encoding.UTF8.GetString(buffer));
+            try
+            {
+                _sslStream.Write(Encoding.UTF8.GetBytes(inputTxtBox.Text + "\r\n"));
+            }
+            catch
+            {
+                MessageBox.Show("server is gone");
+                this.Close();
+            }
         }
 
-        private void updateTimer(object sender, EventArgs e)
+        private void UpdateTimer(object sender, EventArgs e)
         {
             _device.SendKeepalive(_sslStream, currentHsb.Value);
         }
