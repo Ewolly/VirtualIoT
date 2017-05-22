@@ -36,6 +36,7 @@ namespace VirtualIoT
         private void currentHsb_Scroll(object sender, ScrollEventArgs e)
         {
             currentLbl.Text = "Current: " + currentHsb.Value / 100.0 + "A";
+
         }
 
         private void currentLbl_Click(object sender, EventArgs e)

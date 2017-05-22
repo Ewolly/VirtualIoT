@@ -40,9 +40,19 @@ namespace VirtualIoT
 
             byte[] buffer = new byte[128];
             _sslStream.Read(buffer, 0, buffer.Length);
-            if (Encoding.UTF8.GetString(buffer) == "{\"status\": \"success\"}")
+            var response = JsonConvert.DeserializeObject<Dictionary<string, string>>(Encoding.UTF8.GetString(buffer));
+            if(response.ContainsKey("info")) 
                 return _sslStream;
             return null;
+        }
+
+        public void sendCurrent(int current)
+        {
+            { "action": "keepalive",
+              "args": {
+                    "current_consumption": current
+                }
+            }
         }
     }
 }
