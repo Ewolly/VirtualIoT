@@ -60,6 +60,20 @@ namespace VirtualIoT
             ConvertAndSend(sslStream, currentCommand);
         }
 
+        public void SendIRFeedback(SslStream sslStream, bool[] feedback)
+        {
+            var feedbackResponse = new Dictionary<string, object>
+            {
+                {"response", "infrared" },
+                {"kwargs", new Dictionary<string, bool[]>
+                    {
+                        { "feedbacks", feedback }
+                    }
+                }
+            };
+            ConvertAndSend(sslStream, feedbackResponse);
+        }
+
         public void ConvertAndSend(SslStream sslStream, object message)
         {
             byte[] action = Encoding.UTF8.GetBytes(

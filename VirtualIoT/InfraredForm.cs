@@ -46,12 +46,12 @@ namespace VirtualIoT
             _timer.Tick += UpdateTimer;
             _timer.Start();
 
-            _timer = new Timer()
+            _aliveTimer = new Timer()
             {
                 Interval = 2000
             };
-            _timer.Tick += aliveTimer;
-            _timer.Start();
+            _aliveTimer.Tick += aliveTimer;
+            _aliveTimer.Start();
         }
 
         private void currentHsb_Scroll(object sender, ScrollEventArgs e)
@@ -71,15 +71,19 @@ namespace VirtualIoT
             var buffer = new byte[128];
             try
             {
-                int x = _sslStream.Read(buffer, 0, 128);
-                ResultObject result = JsonConvert.DeserializeObject<ResultObject>(Encoding.UTF8.GetString(buffer));
+                _sslStream.Read(buffer, 0, 128);
+                ResultObject result = JsonConvert.DeserializeObject<ResultObject>(
+                    Encoding.UTF8.GetString(buffer));
+
                 if (result == null)
                     return;
+
                 if (result.ir_button != null)
                 {
-                    int id = (int)result.ir_button[0];
+                    int id = Convert.ToInt32(result.ir_button[0]);
+                    string command = (string)(result.ir_button[1]);
                     var button = _device.buttons.Find(b => b.id == id);
-                    outputTb.Text = button.name;
+                    outputTb.Text = button.name+ ": " + command;
                 }
                 else if (result.info != null)
                 {
@@ -88,6 +92,11 @@ namespace VirtualIoT
                 else if (result.error != null)
                 {
                     statusLbl.Text = "Error: " + result.error;
+                }
+                else
+                {
+                
+                    outputTb.AppendText(Encoding.UTF8.GetString(buffer));
                 }
             }
             catch { }
@@ -101,24 +110,17 @@ namespace VirtualIoT
             _device.SendKeepalive(_sslStream, currentHsb.Value);
         }
 
-        private void feedback1Cb_CheckedChanged(object sender, EventArgs e)
-        {
-            // send boolean to dan
-        }
-
-        private void feedback2Cb_CheckedChanged(object sender, EventArgs e)
-        {
-            // send boolean to dan
-        }
-
         private void feedbackCb_CheckedChanged(object sender, EventArgs e)
         {
-            // send boolean to dan
-        }
+            var feedbackArr = new bool[]
+            {
+                feedback1Cb.Checked,
+                feedback2Cb.Checked,
+                feedback3Cb.Checked,
+                feedback4Cb.Checked
+            };
 
-        private void feedback4Cb_CheckedChanged(object sender, EventArgs e)
-        {
-            // send boolean to dan
+            _device.SendIRFeedback(_sslStream, feedbackArr);
         }
     }
 }

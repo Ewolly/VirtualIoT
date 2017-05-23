@@ -31,7 +31,7 @@
             this.outputTb = new System.Windows.Forms.TextBox();
             this.feedback1Cb = new System.Windows.Forms.CheckBox();
             this.feedback2Cb = new System.Windows.Forms.CheckBox();
-            this.feedbackCb = new System.Windows.Forms.CheckBox();
+            this.feedback3Cb = new System.Windows.Forms.CheckBox();
             this.feedback4Cb = new System.Windows.Forms.CheckBox();
             this.currentHsb = new System.Windows.Forms.HScrollBar();
             this.currentLbl = new System.Windows.Forms.Label();
@@ -55,7 +55,7 @@
             this.feedback1Cb.TabIndex = 1;
             this.feedback1Cb.Text = "1";
             this.feedback1Cb.UseVisualStyleBackColor = true;
-            this.feedback1Cb.CheckedChanged += new System.EventHandler(this.feedback1Cb_CheckedChanged);
+            this.feedback1Cb.CheckedChanged += new System.EventHandler(this.feedbackCb_CheckedChanged);
             // 
             // feedback2Cb
             // 
@@ -66,18 +66,18 @@
             this.feedback2Cb.TabIndex = 1;
             this.feedback2Cb.Text = "2";
             this.feedback2Cb.UseVisualStyleBackColor = true;
-            this.feedback2Cb.CheckedChanged += new System.EventHandler(this.feedback2Cb_CheckedChanged);
+            this.feedback2Cb.CheckedChanged += new System.EventHandler(this.feedbackCb_CheckedChanged);
             // 
-            // feedbackCb
+            // feedback3Cb
             // 
-            this.feedbackCb.Appearance = System.Windows.Forms.Appearance.Button;
-            this.feedbackCb.Location = new System.Drawing.Point(248, 79);
-            this.feedbackCb.Name = "feedbackCb";
-            this.feedbackCb.Size = new System.Drawing.Size(92, 24);
-            this.feedbackCb.TabIndex = 1;
-            this.feedbackCb.Text = "3";
-            this.feedbackCb.UseVisualStyleBackColor = true;
-            this.feedbackCb.CheckedChanged += new System.EventHandler(this.feedbackCb_CheckedChanged);
+            this.feedback3Cb.Appearance = System.Windows.Forms.Appearance.Button;
+            this.feedback3Cb.Location = new System.Drawing.Point(248, 79);
+            this.feedback3Cb.Name = "feedback3Cb";
+            this.feedback3Cb.Size = new System.Drawing.Size(92, 24);
+            this.feedback3Cb.TabIndex = 1;
+            this.feedback3Cb.Text = "3";
+            this.feedback3Cb.UseVisualStyleBackColor = true;
+            this.feedback3Cb.CheckedChanged += new System.EventHandler(this.feedbackCb_CheckedChanged);
             // 
             // feedback4Cb
             // 
@@ -88,7 +88,7 @@
             this.feedback4Cb.TabIndex = 1;
             this.feedback4Cb.Text = "4";
             this.feedback4Cb.UseVisualStyleBackColor = true;
-            this.feedback4Cb.CheckedChanged += new System.EventHandler(this.feedback4Cb_CheckedChanged);
+            this.feedback4Cb.CheckedChanged += new System.EventHandler(this.feedbackCb_CheckedChanged);
             // 
             // currentHsb
             // 
@@ -127,7 +127,7 @@
             this.Controls.Add(this.currentLbl);
             this.Controls.Add(this.currentHsb);
             this.Controls.Add(this.feedback4Cb);
-            this.Controls.Add(this.feedbackCb);
+            this.Controls.Add(this.feedback3Cb);
             this.Controls.Add(this.feedback2Cb);
             this.Controls.Add(this.feedback1Cb);
             this.Controls.Add(this.outputTb);
@@ -145,7 +145,7 @@
         private System.Windows.Forms.TextBox outputTb;
         private System.Windows.Forms.CheckBox feedback1Cb;
         private System.Windows.Forms.CheckBox feedback2Cb;
-        private System.Windows.Forms.CheckBox feedbackCb;
+        private System.Windows.Forms.CheckBox feedback3Cb;
         private System.Windows.Forms.CheckBox feedback4Cb;
         private System.Windows.Forms.HScrollBar currentHsb;
         private System.Windows.Forms.Label currentLbl;
