@@ -52,10 +52,15 @@ namespace VirtualIoT
             };
             _aliveTimer.Tick += aliveTimer;
             _aliveTimer.Start();
-            feedback1Cb.Text = (string)(_device.feedback[0]["name"]) ?? "1";
-            feedback2Cb.Text = (string)(_device.feedback[1]["name"]) ?? "2";
-            feedback3Cb.Text = (string)(_device.feedback[2]["name"]) ?? "3";
-            feedback4Cb.Text = (string)(_device.feedback[3]["name"]) ?? "4";
+            var feedbacks = new List<CheckBox>() { feedback1Cb, feedback2Cb, feedback3Cb, feedback4Cb };
+            for (int i = 0; i < 4; i++)
+            {
+                object name;
+                if (_device.feedback[i].TryGetValue("name", out name))
+                    feedbacks[i].Text = (string)name;
+                else
+                    feedbacks[i].Text = (i + 1).ToString();
+            }
         }
 
         private void currentHsb_Scroll(object sender, ScrollEventArgs e)
