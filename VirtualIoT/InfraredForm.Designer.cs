@@ -35,6 +35,7 @@
             this.feedback4Cb = new System.Windows.Forms.CheckBox();
             this.currentHsb = new System.Windows.Forms.HScrollBar();
             this.currentLbl = new System.Windows.Forms.Label();
+            this.statusLbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // outputTb
@@ -44,7 +45,6 @@
             this.outputTb.ReadOnly = true;
             this.outputTb.Size = new System.Drawing.Size(379, 20);
             this.outputTb.TabIndex = 0;
-            this.outputTb.Text = "Infrared can suck a massive cock";
             // 
             // feedback1Cb
             // 
@@ -55,6 +55,7 @@
             this.feedback1Cb.TabIndex = 1;
             this.feedback1Cb.Text = "1";
             this.feedback1Cb.UseVisualStyleBackColor = true;
+            this.feedback1Cb.CheckedChanged += new System.EventHandler(this.feedback1Cb_CheckedChanged);
             // 
             // feedback2Cb
             // 
@@ -65,6 +66,7 @@
             this.feedback2Cb.TabIndex = 1;
             this.feedback2Cb.Text = "2";
             this.feedback2Cb.UseVisualStyleBackColor = true;
+            this.feedback2Cb.CheckedChanged += new System.EventHandler(this.feedback2Cb_CheckedChanged);
             // 
             // feedbackCb
             // 
@@ -75,6 +77,7 @@
             this.feedbackCb.TabIndex = 1;
             this.feedbackCb.Text = "3";
             this.feedbackCb.UseVisualStyleBackColor = true;
+            this.feedbackCb.CheckedChanged += new System.EventHandler(this.feedbackCb_CheckedChanged);
             // 
             // feedback4Cb
             // 
@@ -85,6 +88,7 @@
             this.feedback4Cb.TabIndex = 1;
             this.feedback4Cb.Text = "4";
             this.feedback4Cb.UseVisualStyleBackColor = true;
+            this.feedback4Cb.CheckedChanged += new System.EventHandler(this.feedback4Cb_CheckedChanged);
             // 
             // currentHsb
             // 
@@ -105,11 +109,21 @@
             this.currentLbl.Text = "Current Draw:";
             this.currentLbl.Click += new System.EventHandler(this.currentLbl_Click);
             // 
+            // statusLbl
+            // 
+            this.statusLbl.AutoSize = true;
+            this.statusLbl.Location = new System.Drawing.Point(13, 279);
+            this.statusLbl.Name = "statusLbl";
+            this.statusLbl.Size = new System.Drawing.Size(35, 13);
+            this.statusLbl.TabIndex = 4;
+            this.statusLbl.Text = "label1";
+            // 
             // InfraredForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(489, 304);
+            this.Controls.Add(this.statusLbl);
             this.Controls.Add(this.currentLbl);
             this.Controls.Add(this.currentHsb);
             this.Controls.Add(this.feedback4Cb);
@@ -135,5 +149,6 @@
         private System.Windows.Forms.CheckBox feedback4Cb;
         private System.Windows.Forms.HScrollBar currentHsb;
         private System.Windows.Forms.Label currentLbl;
+        private System.Windows.Forms.Label statusLbl;
     }
 }

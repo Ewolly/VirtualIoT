@@ -16,6 +16,7 @@ namespace VirtualIoT
         public string device_url { get; set; }
         public string token { get; set; }
         public string FriendlyName { get; set; }
+        public List<IRButton> buttons { get; set; }
 
         public DeviceInfo()
         {
@@ -64,6 +65,17 @@ namespace VirtualIoT
             byte[] action = Encoding.UTF8.GetBytes(
                 JsonConvert.SerializeObject(message) + "\r\n");
             sslStream.Write(action, 0, action.Length);
+        }
+        public class IRButton
+        {
+            public int? id { get; set; }
+            public string name { get; set; }
+            public bool? continuous { get; set; }
+            public int? num_pulses { get; set; }
+            public IRButton()
+            {
+            }
+
         }
     }
 }

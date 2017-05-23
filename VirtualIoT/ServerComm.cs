@@ -22,11 +22,18 @@ namespace VirtualIoT
         {
             client = new HttpClient();
         }
-        public async Task<Tuple<ServerResponse, HttpResponseMessage>> GetAsync(string url)
+        public async Task<Tuple<ServerResponse, HttpResponseMessage>> GetAsync(string url, 
+            string email=null, string password=null)
         {
             ServerResponse result = ServerResponse.NotConnected;
             HttpResponseMessage getResponse = null;
             client.DefaultRequestHeaders.Clear();
+
+            if (email != null)
+                client.DefaultRequestHeaders.Add("email", email);
+            if (password != null)
+                client.DefaultRequestHeaders.Add("password", password);
+
             try
             {
                 getResponse = await client.GetAsync(url);

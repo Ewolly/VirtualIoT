@@ -83,6 +83,7 @@ namespace VirtualIoT
                 device_id = 90,
                 token = "759666a2-ed14-4274-8a1f-071653fa9d2d",
                 FriendlyName = "JamiesTV",
+                device_url = "https://iot.duality.co.nz/api/1/device/90/info",
                 module_type = 4
             };
             var device3 = new DeviceInfo()
