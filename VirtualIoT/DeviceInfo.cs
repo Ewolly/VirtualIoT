@@ -17,6 +17,7 @@ namespace VirtualIoT
         public string token { get; set; }
         public string FriendlyName { get; set; }
         public List<IRButton> buttons { get; set; }
+        public List<Dictionary<string, object>> feedback { get; set; }
 
         public DeviceInfo()
         {
