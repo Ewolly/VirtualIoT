@@ -67,7 +67,7 @@ namespace VirtualIoT
                 {"response", "infrared" },
                 {"kwargs", new Dictionary<string, bool[]>
                     {
-                        { "feedbacks", feedback }
+                        { "feedback", feedback }
                     }
                 }
             };
