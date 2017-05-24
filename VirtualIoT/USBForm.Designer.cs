@@ -30,6 +30,8 @@
         {
             this.currentLbl = new System.Windows.Forms.Label();
             this.currentHsb = new System.Windows.Forms.HScrollBar();
+            this.clientsBtn = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // currentLbl
@@ -51,11 +53,30 @@
             this.currentHsb.TabIndex = 4;
             this.currentHsb.Scroll += new System.Windows.Forms.ScrollEventHandler(this.currentHsb_Scroll);
             // 
+            // clientsBtn
+            // 
+            this.clientsBtn.Location = new System.Drawing.Point(44, 29);
+            this.clientsBtn.Name = "clientsBtn";
+            this.clientsBtn.Size = new System.Drawing.Size(75, 23);
+            this.clientsBtn.TabIndex = 6;
+            this.clientsBtn.Text = "Start";
+            this.clientsBtn.UseVisualStyleBackColor = true;
+            this.clientsBtn.Click += new System.EventHandler(this.clientsBtn_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(88, 139);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(334, 20);
+            this.textBox1.TabIndex = 7;
+            // 
             // USBForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(532, 360);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.clientsBtn);
             this.Controls.Add(this.currentLbl);
             this.Controls.Add(this.currentHsb);
             this.Name = "USBForm";
@@ -70,5 +91,7 @@
 
         private System.Windows.Forms.Label currentLbl;
         private System.Windows.Forms.HScrollBar currentHsb;
+        private System.Windows.Forms.Button clientsBtn;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
