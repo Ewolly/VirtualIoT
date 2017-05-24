@@ -11,6 +11,7 @@ using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VirtualIoT.Properties;
@@ -29,6 +30,8 @@ namespace VirtualIoT
         private NetworkStream _netStream;
         private SslStream _ssl;
         public X509Certificate2 cert = new X509Certificate2(Resources.server, "IoTBox");
+        private USB_Thread USB;
+        private Thread USBThread;
         public USBForm(DeviceInfo device)
         {
             InitializeComponent();
@@ -62,28 +65,30 @@ namespace VirtualIoT
         {
             _tcpClient = new TcpClient();
             textBox1.AppendText("Waiting for new Client");
-            _tcpClient = _server.AcceptTcpClient(); // this is blocking, there is a non-blocking version AcceptTcpClientAsync
-            _netStream = _tcpClient.GetStream();
-            _ssl = new SslStream(_netStream, false);
-            _ssl.AuthenticateAsServer(cert, false, SslProtocols.Tls, true);
-            textBox1.AppendText("Connected new client: " + _tcpClient.Client.RemoteEndPoint);
+            //_tcpClient = _server.AcceptTcpClient(); // this is blocking, there is a non-blocking version AcceptTcpClientAsync
+            //_netStream = _tcpClient.GetStream();
+            //_ssl = new SslStream(_netStream, false);
+            //_ssl.AuthenticateAsServer(cert, false, SslProtocols.Tls, true);
+            //textBox1.AppendText("Connected new client: " + _tcpClient.Client.RemoteEndPoint);
+            USB = new USB_Thread
+            {
+                _sslStream = _ssl,
+                ipAddr = "192.168.0.137",
+                port = 12345
+            };
+            USBThread = new Thread(new ThreadStart(USB.Main));
+            USBThread.Start();
             //start new thread
         }
 
-        [MessagePackObject]
-        public class USBData
+        private void stopBtn_Click(object sender, EventArgs e)
         {
-            [Key(0)]
-            public int x { get; set; }
+            USBThread.Abort();
+        }
 
-            [Key(1)]
-            public int y { get; set; }
-
-            [Key(2)]
-            public string keys { get; set; }
-
-            [Key(3)]
-            public string eof = "<EOF>";
+        public string StatusText
+        {
+            set { textBox1.Text = value;}
         }
     }
 }
