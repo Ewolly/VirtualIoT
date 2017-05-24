@@ -90,13 +90,13 @@
     <Compile Include="SmartPlugForm.Designer.cs">
       <DependentUpon>SmartPlugForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="USBForm.cs">
+    <Compile Include="UsbForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="USBForm.Designer.cs">
-      <DependentUpon>USBForm.cs</DependentUpon>
+    <Compile Include="UsbForm.Designer.cs">
+      <DependentUpon>UsbForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="USB_Thread.cs" />
+    <Compile Include="UsbData.cs" />
     <EmbeddedResource Include="AudioForm.resx">
       <DependentUpon>AudioForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -119,8 +119,8 @@
     <EmbeddedResource Include="SmartPlugForm.resx">
       <DependentUpon>SmartPlugForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="USBForm.resx">
-      <DependentUpon>USBForm.cs</DependentUpon>
+    <EmbeddedResource Include="UsbForm.resx">
+      <DependentUpon>UsbForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

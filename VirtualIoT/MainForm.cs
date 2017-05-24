@@ -155,7 +155,7 @@ namespace VirtualIoT
                     new SmartPlugForm(selectedDevice).Show();
                     break;
                 case 3:
-                    new USBForm(selectedDevice).Show();
+                    new UsbForm(selectedDevice).Show();
                     break;
                 case 4:
                     new InfraredForm(selectedDevice).Show();

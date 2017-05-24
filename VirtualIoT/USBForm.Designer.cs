@@ -1,6 +1,6 @@
 ﻿namespace VirtualIoT
 {
-    partial class USBForm
+    partial class UsbForm
     {
         /// <summary>
         /// Required designer variable.
@@ -32,7 +32,6 @@
             this.currentHsb = new System.Windows.Forms.HScrollBar();
             this.clientsBtn = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.stopBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // currentLbl
@@ -71,27 +70,16 @@
             this.textBox1.Size = new System.Drawing.Size(334, 20);
             this.textBox1.TabIndex = 7;
             // 
-            // stopBtn
-            // 
-            this.stopBtn.Location = new System.Drawing.Point(182, 28);
-            this.stopBtn.Name = "stopBtn";
-            this.stopBtn.Size = new System.Drawing.Size(75, 23);
-            this.stopBtn.TabIndex = 8;
-            this.stopBtn.Text = "Stop Thread";
-            this.stopBtn.UseVisualStyleBackColor = true;
-            this.stopBtn.Click += new System.EventHandler(this.stopBtn_Click);
-            // 
-            // USBForm
+            // UsbForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(532, 360);
-            this.Controls.Add(this.stopBtn);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.clientsBtn);
             this.Controls.Add(this.currentLbl);
             this.Controls.Add(this.currentHsb);
-            this.Name = "USBForm";
+            this.Name = "UsbForm";
             this.Text = "USB";
             this.Load += new System.EventHandler(this.USB_Load);
             this.ResumeLayout(false);
@@ -105,6 +93,5 @@
         private System.Windows.Forms.HScrollBar currentHsb;
         private System.Windows.Forms.Button clientsBtn;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button stopBtn;
     }
 }
