@@ -1,12 +1,7 @@
 ﻿using MessagePack;
 using Gma.System.MouseKeyHook;
-using MessagePack;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
@@ -24,14 +19,10 @@ namespace VirtualIoT
         private IKeyboardMouseEvents _globalHook;
         SslStream _sslStream = null;
         DeviceInfo _device;
-        private TcpListener _server;
-        private IPAddress _ip = IPAddress.Parse("192.168.0.137");
-        private int _port = 12345;
-        private TcpClient _tcpClient = new TcpClient();
         private SslStream _sslClient;
         public X509Certificate2 _cert = new X509Certificate2(Resources.server, "IoTBox");
         public UsbData _usbData;
-        private System.Windows.Forms.Timer _usbTimer;
+        private Timer _usbTimer;
         private bool _send;
         private Timer _aliveTimer;
         private Timer _timer;
@@ -39,8 +30,6 @@ namespace VirtualIoT
         public UsbForm(DeviceInfo device)
         {
             InitializeComponent();
-            _server = new TcpListener(_ip, _port);
-            _server.Start();
             _device = device;
 
             _usbTimer = new Timer();
@@ -157,6 +146,19 @@ namespace VirtualIoT
             _device.SendKeepalive(_sslStream, currentHsb.Value);
         }
 
+        public static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("Local IP Address Not Found!");
+        }
+
         private void UpdateTimer(object sender, EventArgs e)
         {
             var old_timeout = _sslStream.ReadTimeout;
@@ -185,12 +187,15 @@ namespace VirtualIoT
                     // put ssl tcp server start code here
                     // equivalent of start button
 
-                    _tcpClient = new TcpClient();
+                    var server = new TcpListener(IPAddress.Any, 0);
+                    server.Start();
+                    var port = ((IPEndPoint)server.LocalEndpoint).Port;
+                    var tcpClient = new TcpClient();
                     textBox1.AppendText("Waiting for new Client");
-                    _tcpClient = _server.AcceptTcpClient();
-                    _sslClient = new SslStream(_tcpClient.GetStream(), false);
+                    tcpClient = server.AcceptTcpClient();
+                    _sslClient = new SslStream(tcpClient.GetStream(), false);
                     _sslClient.AuthenticateAsServer(_cert, false, SslProtocols.Tls, true);
-                    textBox1.AppendText("Connected new client: " + _tcpClient.Client.RemoteEndPoint);
+                    textBox1.AppendText("Connected new client: " + tcpClient.Client.RemoteEndPoint);
                     SubscribeEvents();
 
                     _device.ConvertAndSend(_sslClient, new ResponseObject
@@ -198,8 +203,8 @@ namespace VirtualIoT
                         response = "server_setup",
                         kwargs = new Dictionary<string, object>
                     {
-                        { "ip" , "192.168.0.137" },
-                        { "port" , 12345 }
+                        { "ip" , GetLocalIPAddress() },
+                        { "port" , port }
                     }
                     });
                 }
