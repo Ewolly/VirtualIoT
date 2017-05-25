@@ -19,7 +19,7 @@ namespace VirtualIoT
         private IKeyboardMouseEvents _globalHook;
         SslStream _sslStream = null;
         DeviceInfo _device;
-        private SslStream _sslClient;
+        private SslStream _sslClient = null;
         public X509Certificate2 _cert = new X509Certificate2(Resources.server, "IoTBox");
         public UsbData _usbData;
         private Timer _usbTimer;
@@ -182,7 +182,8 @@ namespace VirtualIoT
 
             if (result.server != null)
             {
-                if (_sslClient != null)
+                Console.WriteLine(result.server);
+                if (_sslClient == null)
                 {
                     // put ssl tcp server start code here
                     // equivalent of start button
@@ -192,13 +193,7 @@ namespace VirtualIoT
                     var port = ((IPEndPoint)server.LocalEndpoint).Port;
                     var tcpClient = new TcpClient();
                     textBox1.AppendText("Waiting for new Client");
-                    tcpClient = server.AcceptTcpClient();
-                    _sslClient = new SslStream(tcpClient.GetStream(), false);
-                    _sslClient.AuthenticateAsServer(_cert, false, SslProtocols.Tls, true);
-                    textBox1.AppendText("Connected new client: " + tcpClient.Client.RemoteEndPoint);
-                    SubscribeEvents();
-
-                    _device.ConvertAndSend(_sslClient, new ResponseObject
+                    _device.ConvertAndSend(_sslStream, new ResponseObject
                     {
                         response = "server_setup",
                         kwargs = new Dictionary<string, object>
@@ -207,6 +202,11 @@ namespace VirtualIoT
                         { "port" , port }
                     }
                     });
+                    tcpClient = server.AcceptTcpClient();
+                    _sslClient = new SslStream(tcpClient.GetStream(), false);
+                    _sslClient.AuthenticateAsServer(_cert, false, SslProtocols.Tls, true);
+                    textBox1.AppendText("Connected new client: " + tcpClient.Client.RemoteEndPoint);
+                    SubscribeEvents();
                 }
             }
             else if (result.info != null)
@@ -217,7 +217,10 @@ namespace VirtualIoT
             {
                 statusLbl.Text = "Error: " + result.error;
             }
-
+            else
+            {
+                statusLbl.Text = Encoding.UTF8.GetString(buffer);
+            }
         }
 
     }
