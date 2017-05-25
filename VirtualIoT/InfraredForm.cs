@@ -36,7 +36,6 @@ namespace VirtualIoT
             var result = await _serverComm.GetAsync(_device.device_url, "hunter3@example.com", "12345678");
             var jsonStr = await result.Item2.Content.ReadAsStringAsync();
             _device = JsonConvert.DeserializeObject<DeviceInfo>(jsonStr);
-            Console.WriteLine(_device.buttons.Count);
 
             //start timer
             _timer = new Timer()

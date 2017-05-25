@@ -49,13 +49,12 @@ namespace VirtualIoT
 
         public void SendKeepalive(SslStream sslStream, int curr)
         {
-            var currentCommand = new Dictionary<string, object>
+            var currentCommand = new ActionObject
             {
-                {"action", "keepalive" },
-                {"kwargs", new Dictionary<string, int>
-                    {
-                        { "current_consumption", curr }
-                    }
+                action = "keepalive",
+                kwargs = new Dictionary<string, object>
+                {
+                    { "current_consumption", curr }
                 }
             };
             ConvertAndSend(sslStream, currentCommand);
@@ -63,13 +62,12 @@ namespace VirtualIoT
 
         public void SendIRFeedback(SslStream sslStream, bool[] feedback)
         {
-            var feedbackResponse = new Dictionary<string, object>
+            var feedbackResponse = new ResponseObject
             {
-                {"response", "infrared" },
-                {"kwargs", new Dictionary<string, bool[]>
-                    {
-                        { "feedback", feedback }
-                    }
+                response = "infrared",
+                kwargs = new Dictionary<string, object>
+                {
+                    {"feedback", feedback}
                 }
             };
             ConvertAndSend(sslStream, feedbackResponse);

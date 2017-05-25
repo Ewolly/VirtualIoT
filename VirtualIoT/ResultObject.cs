@@ -11,6 +11,20 @@ namespace VirtualIoT
         public string info { get; set; }
         public string error { get; set; }
         public bool? power { get; set; }
+        public string server { get; set; }
         public object[] ir_button { get; set; }
     }
+
+    public class ActionObject
+    {
+        public string action { get; set; }
+        public Dictionary<string, object> kwargs { get; set; }
+    }
+
+    public class ResponseObject
+    {
+        public string response { get; set; }
+        public Dictionary<string, object> kwargs { get; set; }
+    }
+
 }
