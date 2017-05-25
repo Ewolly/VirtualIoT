@@ -22,13 +22,13 @@ namespace VirtualIoT
 
         [Key(2)]
         public int mb { get; set; }
-        //1 = lmb, 2 = rmb, 3 = mmb
+        //1 = lmbdn, 2 = lmbup, 3 = rmbdn, 4 = rmbup
 
         [Key(3)]
         public int scroll { get; set; }
 
         [Key(4)]
-        public string keys { get; set; }
+        public byte key { get; set; }
 
         [Key(5)]
         public string eof = "<EOF>";
