@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace VirtualIoT
 {
     public partial class AudioForm : Form
@@ -17,10 +18,16 @@ namespace VirtualIoT
         DeviceInfo _device;
         private Timer _timer;
         private Timer _checkRespTimer;
+
+        // jamies audio stuff 
+        private AudioHandler _handler;
+        private bool _recording = false;
+
         public AudioForm(DeviceInfo device)
         {
             InitializeComponent();
             _device = device;
+
         }
 
         private void AudioEmulate_Load(object sender, EventArgs e)

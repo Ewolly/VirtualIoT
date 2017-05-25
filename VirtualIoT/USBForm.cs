@@ -26,15 +26,14 @@ namespace VirtualIoT
         SslStream _sslStream;
         DeviceInfo _device;
         private TcpListener _server;
-        private byte[] _buffer;
         private IPAddress _ip = IPAddress.Parse("192.168.0.137");
         private int _port = 12345;
         private TcpClient _tcpClient = new TcpClient();
-        private NetworkStream _netStream;
         private SslStream _sslClient;
         public X509Certificate2 _cert = new X509Certificate2(Resources.server, "IoTBox");
         public UsbData _usbData;
-        public bool _lock;
+        private System.Windows.Forms.Timer _usbTimer;
+        private bool _send;
 
         public UsbForm(DeviceInfo device)
         {
@@ -42,6 +41,20 @@ namespace VirtualIoT
             _server = new TcpListener(_ip, _port);
             _server.Start();
             _device = device;
+
+            _usbTimer = new System.Windows.Forms.Timer();
+            _usbTimer.Interval = 5;
+            _usbTimer.Tick += SendData;
+        }
+
+        private void SendData(object sender, EventArgs e)
+        {
+            if (_send)
+            {
+                _send = false;
+                var dataToSend = MessagePackSerializer.Serialize(_usbData);
+                _sslClient.Write(dataToSend, 0, dataToSend.Length);
+            }
         }
 
         private void USB_Load(object sender, EventArgs e)
@@ -76,17 +89,7 @@ namespace VirtualIoT
             textBox1.AppendText("Connected new client: " + _tcpClient.Client.RemoteEndPoint);
             SubscribeEvents();
         }
-
-        private async void SendData()
-        {
-            if (_lock)
-                return;
-            _lock = true;
-            var dataToSend = MessagePackSerializer.Serialize(_usbData);
-            await _sslClient.WriteAsync(dataToSend, 0, dataToSend.Length);
-            _lock = false;
-        }
-
+        
         public void SubscribeEvents()
         {
             _usbData = new UsbData()
@@ -100,19 +103,23 @@ namespace VirtualIoT
             _globalHook.MouseClick += HandleMouseClick;
             _globalHook.MouseMoveExt += HandleMouseMove;
             _globalHook.KeyPress += HandleKeyPress;
+            _usbTimer.Start();
+            _send = true;
         }
 
         private void HandleMouseMove(object sender, MouseEventExtArgs e)
         {
+            textBox1.Text = "mouse moved";
             _usbData.x = e.X;
             _usbData.y = e.Y;
-            SendData();
+            _send = true;
         }
 
         private void HandleKeyPress(object sender, KeyPressEventArgs e)
         {
+            Console.WriteLine("key pressed");
             _usbData.keys = e.KeyChar.ToString();
-            SendData();
+            _send = true;
         }
 
         private void HandleMouseClick(object sender, MouseEventArgs e)
@@ -125,8 +132,7 @@ namespace VirtualIoT
                 _usbData.mb = 3;
             else
                 _usbData.mb = 0;
-            SendData();
-           _usbData.mb = 0;
+            _send = true;
         }
     }
 }

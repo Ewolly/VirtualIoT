@@ -42,7 +42,7 @@
             // micCb
             // 
             this.micCb.AutoSize = true;
-            this.micCb.Location = new System.Drawing.Point(46, 65);
+            this.micCb.Location = new System.Drawing.Point(46, 28);
             this.micCb.Name = "micCb";
             this.micCb.Size = new System.Drawing.Size(82, 17);
             this.micCb.TabIndex = 0;
@@ -52,7 +52,7 @@
             // speakerCb
             // 
             this.speakerCb.AutoSize = true;
-            this.speakerCb.Location = new System.Drawing.Point(293, 65);
+            this.speakerCb.Location = new System.Drawing.Point(46, 51);
             this.speakerCb.Name = "speakerCb";
             this.speakerCb.Size = new System.Drawing.Size(66, 17);
             this.speakerCb.TabIndex = 0;
@@ -61,7 +61,7 @@
             // 
             // startBtn
             // 
-            this.startBtn.Location = new System.Drawing.Point(134, 121);
+            this.startBtn.Location = new System.Drawing.Point(37, 85);
             this.startBtn.Name = "startBtn";
             this.startBtn.Size = new System.Drawing.Size(75, 23);
             this.startBtn.TabIndex = 1;
@@ -71,7 +71,7 @@
             // 
             // stopBtn
             // 
-            this.stopBtn.Location = new System.Drawing.Point(134, 168);
+            this.stopBtn.Location = new System.Drawing.Point(37, 124);
             this.stopBtn.Name = "stopBtn";
             this.stopBtn.Size = new System.Drawing.Size(75, 23);
             this.stopBtn.TabIndex = 2;
@@ -82,7 +82,7 @@
             // currentLbl
             // 
             this.currentLbl.AutoSize = true;
-            this.currentLbl.Location = new System.Drawing.Point(359, 162);
+            this.currentLbl.Location = new System.Drawing.Point(228, 244);
             this.currentLbl.Name = "currentLbl";
             this.currentLbl.Size = new System.Drawing.Size(72, 13);
             this.currentLbl.TabIndex = 5;
@@ -91,7 +91,7 @@
             // 
             // currentHsb
             // 
-            this.currentHsb.Location = new System.Drawing.Point(236, 121);
+            this.currentHsb.Location = new System.Drawing.Point(103, 208);
             this.currentHsb.Maximum = 1009;
             this.currentHsb.Name = "currentHsb";
             this.currentHsb.Size = new System.Drawing.Size(328, 17);
