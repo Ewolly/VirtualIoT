@@ -98,18 +98,40 @@ namespace VirtualIoT
                 y = 500,
                 mb = 0,
                 scroll = 0,
-                keys = ""
+                key = 0
             };
-            _globalHook.MouseClick += HandleMouseClick;
+            _globalHook.MouseUpExt += HandleMouseUpExt;
+            _globalHook.MouseDownExt += HandleMouseDownExt;
             _globalHook.MouseMoveExt += HandleMouseMove;
             _globalHook.KeyPress += HandleKeyPress;
             _usbTimer.Start();
             _send = true;
         }
 
+        private void HandleMouseDownExt(object sender, MouseEventExtArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                _usbData.mb = 1;
+            else if (e.Button == MouseButtons.Right)
+                _usbData.mb = 3;
+            else
+                _usbData.mb = 0;
+            _send = true;
+        }
+
+        private void HandleMouseUpExt(object sender, MouseEventExtArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                _usbData.mb = 2;
+            else if (e.Button == MouseButtons.Right)
+                _usbData.mb = 4;
+            else
+                _usbData.mb = 0;
+            _send = true;
+        }
+
         private void HandleMouseMove(object sender, MouseEventExtArgs e)
         {
-            textBox1.Text = "mouse moved";
             _usbData.x = e.X;
             _usbData.y = e.Y;
             _send = true;
@@ -118,20 +140,7 @@ namespace VirtualIoT
         private void HandleKeyPress(object sender, KeyPressEventArgs e)
         {
             Console.WriteLine("key pressed");
-            _usbData.keys = e.KeyChar.ToString();
-            _send = true;
-        }
-
-        private void HandleMouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-                _usbData.mb = 1;
-            else if (e.Button == MouseButtons.Right)
-                _usbData.mb = 2;
-            else if (e.Button == MouseButtons.Middle)
-                _usbData.mb = 3;
-            else
-                _usbData.mb = 0;
+            _usbData.key = (byte)e.KeyChar;
             _send = true;
         }
     }
