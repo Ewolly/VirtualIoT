@@ -35,6 +35,7 @@ namespace VirtualIoT
         private bool _micLock;
         private bool _speakerLock;
         private bool _startRecordingLock = false;
+        private bool _startPlaybackLock = false;
         public AudioRead _audioRead = new AudioRead();
         private FixedSizedQueue<byte[]> SendQueue = new FixedSizedQueue<byte[]>(32);
         private FixedSizedQueue<byte[]> RecieveQueue = new FixedSizedQueue<byte[]>(32);
@@ -62,34 +63,41 @@ namespace VirtualIoT
                 _recieve = MessagePackSerializer.Deserialize<AudioMsgPack>(buffer);
                 _sendLock = _recieve.mic;  // enables sending of data if dan requests mic
                 _recieveLock = _recieve.speaker; // if dan requests speaker set _recieve lock true
-                RecieveQueue.Enqueue(_recieve.mp3);  // maybe make this only do this if it isnt locked?
+                if (_recieveLock && _speakerLock)    // enters here if dan requests it and speaker enabled
+                {
+                    RecieveQueue.Enqueue(_recieve.mp3);  // maybe make this only do this if it isnt locked?
+                    if (_startPlaybackLock) // only want to start playback once for the request
+                    {
+                        _startPlaybackLock = false;
+                        _audioRead.StartRecording(RecieveQueue);
+                    }
+
+                }
             }
         }
 
         private void SendData(object sender, EventArgs e)
         {
-            if (_micLock)  //if mic is "plugged in" will allow sending
-            {
-                if (_sendLock)  // if dan request mic will allow mic pass through
+            if (_micLock && _sendLock)  //if mic is "plugged in" will allow sending
+            {   
+                if (_startRecordingLock) // only want to start recording once for the request
                 {
-                    if (_startRecordingLock) // only want to start recording once for the request
-                    {
-                        _startRecordingLock = false;
-                        _audioRead.StartRecording(SendQueue);
-                    }
-                    _send.mic = micCb.Checked;
-                    _send.speaker = micCb.Checked;
-                    byte[] mp3;
-                    bool success = SendQueue.TryDequeue(out mp3);
-                    if (success)
-                    {
-                        _send.mp3 = mp3;
-                        _sendLock = false;
-                        var dataToSend = MessagePackSerializer.Serialize(_send);
-                        _sslClient.Write(dataToSend, 0, dataToSend.Length);
-                    }
-
+                    _startRecordingLock = false;
+                    _audioRead.StartRecording(SendQueue);
                 }
+                _send.mic = micCb.Checked;
+                _send.speaker = micCb.Checked;
+                byte[] mp3;
+                bool success = SendQueue.TryDequeue(out mp3);
+                if (success)
+                {
+                    _send.mp3 = mp3;
+                    _sendLock = false;
+                    var dataToSend = MessagePackSerializer.Serialize(_send);
+                    _sslClient.Write(dataToSend, 0, dataToSend.Length);
+                }
+
+                
             }
         }
 
