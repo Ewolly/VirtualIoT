@@ -107,8 +107,7 @@ namespace VirtualIoT
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            _queue.Enqueue(buffer);
-            return count;
+            return _queue.TryDequeue(out buffer) ? buffer.Length : 0;
         }
 
         public override long Seek(long offset, SeekOrigin origin)
