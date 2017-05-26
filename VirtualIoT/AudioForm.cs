@@ -51,16 +51,32 @@ namespace VirtualIoT
             _audioTimer.Tick += SendData;
             _audioTimer.Tick += RecieveData;
 
+            _audioTimer.Start();
+
         }
 
         private void RecieveData(object sender, EventArgs e)
         {
-            if (_recieveLock)
+            if (_speakerLock)
             {
                 _recieveLock = false;
-                var buffer = new byte[128];
-                _sslClient.Read(buffer, 0, 128);
-                _recieve = MessagePackSerializer.Deserialize<AudioMsgPack>(buffer);
+                var buffer = new byte[512];
+                _sslClient.ReadTimeout = 1;
+                try
+                {
+                    _sslClient.Read(buffer, 0, 512);
+                    outputTxtBox.AppendText(Encoding.UTF8.GetString(buffer));
+                    _recieve = MessagePackSerializer.Deserialize<AudioMsgPack>(buffer);
+                }
+                catch
+                {
+                    return;
+                }
+                finally
+                {
+                    _sslClient.ReadTimeout = -1;
+                }
+                    
                 _sendLock = _recieve.mic;  // enables sending of data if dan requests mic
                 _recieveLock = _recieve.speaker; // if dan requests speaker set _recieve lock true
                 if (_recieveLock && _speakerLock)    // enters here if dan requests it and speaker enabled
@@ -123,6 +139,26 @@ namespace VirtualIoT
             };
             _checkRespTimer.Tick += UpdateResponseBox;
             _checkRespTimer.Start();
+
+            var server = new TcpListener(IPAddress.Any, 12345);
+            server.Start();
+            var port = ((IPEndPoint)server.LocalEndpoint).Port;
+            var tcpClient = new TcpClient();
+            outputTxtBox.AppendText("Waiting for new Client");
+            //_device.ConvertAndSend(_sslStream, new ResponseObject
+            //{
+            //    response = "server_setup",
+            //    kwargs = new Dictionary<string, object>
+            //{
+            //    { "ip" , GetLocalIPAddress() },
+            //    { "port" , port }
+            //}
+            //});
+            tcpClient = server.AcceptTcpClient();
+            _sslClient = new SslStream(tcpClient.GetStream(), false);
+            _sslClient.AuthenticateAsServer(_cert, false, SslProtocols.Tls, true);
+            outputTxtBox.AppendText("Connected new client: " + tcpClient.Client.RemoteEndPoint);
+
         }
 
         private void UpdateResponseBox(object sender, EventArgs e)
@@ -154,24 +190,24 @@ namespace VirtualIoT
                     // put ssl tcp server start code here
                     // equivalent of start button
 
-                    var server = new TcpListener(IPAddress.Any, 0);
-                    server.Start();
-                    var port = ((IPEndPoint)server.LocalEndpoint).Port;
-                    var tcpClient = new TcpClient();
-                    outputTxtBox.AppendText("Waiting for new Client");
-                    _device.ConvertAndSend(_sslStream, new ResponseObject
-                    {
-                        response = "server_setup",
-                        kwargs = new Dictionary<string, object>
-                    {
-                        { "ip" , GetLocalIPAddress() },
-                        { "port" , port }
-                    }
-                    });
-                    tcpClient = server.AcceptTcpClient();
-                    _sslClient = new SslStream(tcpClient.GetStream(), false);
-                    _sslClient.AuthenticateAsServer(_cert, false, SslProtocols.Tls, true);
-                    outputTxtBox.AppendText("Connected new client: " + tcpClient.Client.RemoteEndPoint);
+                    //var server = new TcpListener(IPAddress.Any, 12345);
+                    //server.Start();
+                    //var port = ((IPEndPoint)server.LocalEndpoint).Port;
+                    //var tcpClient = new TcpClient();
+                    //outputTxtBox.AppendText("Waiting for new Client");
+                    ////_device.ConvertAndSend(_sslStream, new ResponseObject
+                    ////{
+                    ////    response = "server_setup",
+                    ////    kwargs = new Dictionary<string, object>
+                    ////{
+                    ////    { "ip" , GetLocalIPAddress() },
+                    ////    { "port" , port }
+                    ////}
+                    ////});
+                    //tcpClient = server.AcceptTcpClient();
+                    //_sslClient = new SslStream(tcpClient.GetStream(), false);
+                    //_sslClient.AuthenticateAsServer(_cert, false, SslProtocols.Tls, true);
+                    //outputTxtBox.AppendText("Connected new client: " + tcpClient.Client.RemoteEndPoint);
                 }
             }
             else if (result.info != null)
