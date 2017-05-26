@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MessagePack;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VirtualIoT.Properties;
+using System.Collections;
 
 namespace VirtualIoT
 {
@@ -23,14 +25,69 @@ namespace VirtualIoT
         DeviceInfo _device;
         private Timer _timer;
         private Timer _checkRespTimer;
+        private Timer _audioTimer;
         private SslStream _sslClient;
         public X509Certificate2 _cert = new X509Certificate2(Resources.server, "IoTBox");
+        public AudioMsgPack _recieve;
+        public AudioMsgPack _send;
+        private bool _sendLock;
+        private bool _recieveLock;
+        private bool _micLock;
+        private bool _speakerLock;
+        private FixedSizedQueue<byte[]> SendQueue = new FixedSizedQueue<byte[]>(32);
+        private FixedSizedQueue<byte[]> RecieveQueue = new FixedSizedQueue<byte[]>(32);
+
 
         public AudioForm(DeviceInfo device)
         {
             InitializeComponent();
             _device = device;
 
+            _audioTimer = new Timer();
+            _audioTimer.Interval = 5;
+            _audioTimer.Tick += SendData;
+            _audioTimer.Tick += RecieveData;
+
+        }
+
+        private void RecieveData(object sender, EventArgs e)
+        {
+            if (_recieveLock)
+            {
+                _recieveLock = false;
+                var buffer = new byte[128];
+                _sslClient.Read(buffer, 0, 128);
+                _recieve = MessagePackSerializer.Deserialize<AudioMsgPack>(buffer);
+                if (_recieve.mic == true && micCb.Checked == true)
+                {
+                    _micLock = true;
+                    MicConCb.Checked = true;
+                }
+                if (_recieve.speaker == true && speakerCb.Checked == true)
+                {
+                    _speakerLock = true;
+                    SpeakConCb.Checked = true;
+                }
+                RecieveQueue.Enqueue(_recieve.mp3);
+            }
+        }
+
+        private void SendData(object sender, EventArgs e)
+        {
+            if (_sendLock)
+            {
+                _send.mic = micCb.Checked;
+                _send.speaker = micCb.Checked;
+                byte[] mp3;
+                bool success = SendQueue.TryDequeue(out mp3);
+                if (success)
+                {
+                    _send.mp3 = mp3;
+                    _sendLock = false;
+                    var dataToSend = MessagePackSerializer.Serialize(_send);
+                    _sslClient.Write(dataToSend, 0, dataToSend.Length);
+                }
+            }
         }
 
         private void AudioEmulate_Load(object sender, EventArgs e)
