@@ -73,6 +73,8 @@
       <DependentUpon>AudioForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AudioMsgPack.cs" />
+    <Compile Include="AudioRead.cs" />
+    <Compile Include="AudioWrite.cs" />
     <Compile Include="DeviceInfo.cs" />
     <Compile Include="InfraredForm.cs">
       <SubType>Form</SubType>

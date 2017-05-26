@@ -49,6 +49,7 @@
             this.micCb.TabIndex = 0;
             this.micCb.Text = "Microphone";
             this.micCb.UseVisualStyleBackColor = true;
+            this.micCb.CheckedChanged += new System.EventHandler(this.micCb_CheckedChanged);
             // 
             // speakerCb
             // 
@@ -59,6 +60,7 @@
             this.speakerCb.TabIndex = 0;
             this.speakerCb.Text = "Speaker";
             this.speakerCb.UseVisualStyleBackColor = true;
+            this.speakerCb.CheckedChanged += new System.EventHandler(this.speakerCb_CheckedChanged);
             // 
             // currentLbl
             // 

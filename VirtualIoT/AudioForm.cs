@@ -34,6 +34,8 @@ namespace VirtualIoT
         private bool _recieveLock;
         private bool _micLock;
         private bool _speakerLock;
+        private bool _startRecordingLock = false;
+        public AudioRead _audioRead = new AudioRead();
         private FixedSizedQueue<byte[]> SendQueue = new FixedSizedQueue<byte[]>(32);
         private FixedSizedQueue<byte[]> RecieveQueue = new FixedSizedQueue<byte[]>(32);
 
@@ -58,34 +60,35 @@ namespace VirtualIoT
                 var buffer = new byte[128];
                 _sslClient.Read(buffer, 0, 128);
                 _recieve = MessagePackSerializer.Deserialize<AudioMsgPack>(buffer);
-                if (_recieve.mic == true && micCb.Checked == true)
-                {
-                    _micLock = true;
-                    MicConCb.Checked = true;
-                }
-                if (_recieve.speaker == true && speakerCb.Checked == true)
-                {
-                    _speakerLock = true;
-                    SpeakConCb.Checked = true;
-                }
-                RecieveQueue.Enqueue(_recieve.mp3);
+                _sendLock = _recieve.mic;  // enables sending of data if dan requests mic
+                _recieveLock = _recieve.speaker; // if dan requests speaker set _recieve lock true
+                RecieveQueue.Enqueue(_recieve.mp3);  // maybe make this only do this if it isnt locked?
             }
         }
 
         private void SendData(object sender, EventArgs e)
         {
-            if (_sendLock)
+            if (_micLock)  //if mic is "plugged in" will allow sending
             {
-                _send.mic = micCb.Checked;
-                _send.speaker = micCb.Checked;
-                byte[] mp3;
-                bool success = SendQueue.TryDequeue(out mp3);
-                if (success)
+                if (_sendLock)  // if dan request mic will allow mic pass through
                 {
-                    _send.mp3 = mp3;
-                    _sendLock = false;
-                    var dataToSend = MessagePackSerializer.Serialize(_send);
-                    _sslClient.Write(dataToSend, 0, dataToSend.Length);
+                    if (_startRecordingLock) // only want to start recording once for the request
+                    {
+                        _startRecordingLock = false;
+                        _audioRead.StartRecording(SendQueue);
+                    }
+                    _send.mic = micCb.Checked;
+                    _send.speaker = micCb.Checked;
+                    byte[] mp3;
+                    bool success = SendQueue.TryDequeue(out mp3);
+                    if (success)
+                    {
+                        _send.mp3 = mp3;
+                        _sendLock = false;
+                        var dataToSend = MessagePackSerializer.Serialize(_send);
+                        _sslClient.Write(dataToSend, 0, dataToSend.Length);
+                    }
+
                 }
             }
         }
@@ -226,6 +229,30 @@ namespace VirtualIoT
         private void UpdateTimer(object sender, EventArgs e)
         {
             _device.SendKeepalive(_sslStream, currentHsb.Value);
+        }
+
+        private void micCb_CheckedChanged(object sender, EventArgs e)
+        {
+            if(micCb.Checked == true)
+            {
+                _micLock = true;
+            }
+            else
+            {
+                _micLock = false;
+            }
+        }
+
+        private void speakerCb_CheckedChanged(object sender, EventArgs e)
+        {
+            if (speakerCb.Checked == true)
+            {
+                _speakerLock = true;
+            }
+            else
+            {
+                _speakerLock = false;
+            }
         }
     }
 }
