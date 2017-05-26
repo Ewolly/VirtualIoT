@@ -1,14 +1,19 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Net.Security;
+using System.Net.Sockets;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using VirtualIoT.Properties;
 
 namespace VirtualIoT
 {
@@ -18,10 +23,8 @@ namespace VirtualIoT
         DeviceInfo _device;
         private Timer _timer;
         private Timer _checkRespTimer;
-
-        // jamies audio stuff 
-        private AudioHandler _handler;
-        private bool _recording = false;
+        private SslStream _sslClient;
+        public X509Certificate2 _cert = new X509Certificate2(Resources.server, "IoTBox");
 
         public AudioForm(DeviceInfo device)
         {
@@ -59,16 +62,75 @@ namespace VirtualIoT
             var old_timeout = _sslStream.ReadTimeout;
             _sslStream.ReadTimeout = 10;
             var buffer = new byte[128];
+            ResultObject result = null;
             try
             {
-                int x = _sslStream.Read(buffer, 0, 128);
-                outputTxtBox.AppendText(Encoding.ASCII.GetString(buffer, 0, x));
+                _sslStream.Read(buffer, 0, 128);
+                result = JsonConvert.DeserializeObject<ResultObject>(
+                        Encoding.UTF8.GetString(buffer));
             }
-            catch { }
-            finally
+            catch
             {
-                _sslStream.ReadTimeout = old_timeout;
+                return;
             }
+
+
+            if (result == null)
+                return;
+
+            if (result.server != null)
+            {
+                Console.WriteLine(result.server);
+                if (_sslClient == null)
+                {
+                    // put ssl tcp server start code here
+                    // equivalent of start button
+
+                    var server = new TcpListener(IPAddress.Any, 0);
+                    server.Start();
+                    var port = ((IPEndPoint)server.LocalEndpoint).Port;
+                    var tcpClient = new TcpClient();
+                    outputTxtBox.AppendText("Waiting for new Client");
+                    _device.ConvertAndSend(_sslStream, new ResponseObject
+                    {
+                        response = "server_setup",
+                        kwargs = new Dictionary<string, object>
+                    {
+                        { "ip" , GetLocalIPAddress() },
+                        { "port" , port }
+                    }
+                    });
+                    tcpClient = server.AcceptTcpClient();
+                    _sslClient = new SslStream(tcpClient.GetStream(), false);
+                    _sslClient.AuthenticateAsServer(_cert, false, SslProtocols.Tls, true);
+                    outputTxtBox.AppendText("Connected new client: " + tcpClient.Client.RemoteEndPoint);
+                }
+            }
+            else if (result.info != null)
+            {
+                statusLbl.Text = "Info: " + result.info;
+            }
+            else if (result.error != null)
+            {
+                statusLbl.Text = "Error: " + result.error;
+            }
+            else
+            {
+                statusLbl.Text = Encoding.UTF8.GetString(buffer);
+            }
+        }
+
+        public static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("Local IP Address Not Found!");
         }
 
         private void startBtn_Click(object sender, EventArgs e)

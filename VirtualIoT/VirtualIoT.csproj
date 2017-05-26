@@ -72,8 +72,6 @@
     <Compile Include="AudioForm.Designer.cs">
       <DependentUpon>AudioForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AudioHandler.cs" />
-    <Compile Include="Connection.cs" />
     <Compile Include="DeviceInfo.cs" />
     <Compile Include="InfraredForm.cs">
       <SubType>Form</SubType>
