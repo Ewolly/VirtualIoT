@@ -35,28 +35,5 @@ namespace VirtualIoT
         
         [Key(6)]
         public string eof = "<EOF>";
-
-
-        //public void Main()
-        //{
-        //    data = new USBData
-        //    {
-        //        x = 750,
-        //        y = 500,
-        //        mb = 0,
-        //        scroll = 0,
-        //        keys = ""
-        //    };
-        //    while (true)
-        //    {
-
-        //        data.x = Cursor.Position.X;
-        //        data.y = Cursor.Position.Y;
-        //        //update data
-        //        byte[] sendData;
-        //        sendData = MessagePackSerializer.Serialize(data);
-        //        //_sslStream.Write(sendData); 
-        //    }
-        //}
     }
 }

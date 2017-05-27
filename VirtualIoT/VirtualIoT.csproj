@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadFullyStream.cs" />
     <Compile Include="ResultObject.cs" />
     <Compile Include="ServerComm.cs" />
     <Compile Include="SetupInfo.cs" />

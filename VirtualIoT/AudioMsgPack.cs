@@ -19,6 +19,9 @@ namespace VirtualIoT
 
         [Key(2)]
         public byte[] mp3 { get; set; }
+
+        [Key(3)]
+        public string end = "<EOF>";
     }
 
     public class FixedSizedQueue<T> : ConcurrentQueue<T>
