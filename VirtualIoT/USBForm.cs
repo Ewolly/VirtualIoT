@@ -26,6 +26,7 @@ namespace VirtualIoT
         private bool _send;
         private Timer _aliveTimer;
         private Timer _timer;
+        private KeyboardSender _kbs;
 
         public UsbForm(DeviceInfo device)
         {
@@ -35,6 +36,15 @@ namespace VirtualIoT
             _usbTimer = new Timer();
             _usbTimer.Interval = 5;
             _usbTimer.Tick += SendData;
+
+        }
+
+        private void kbs_KeyEvent(object sender, EventArgs e)
+        {
+            //Console.WriteLine("key pressed");
+            _usbData.key = _kbs.key;
+            _usbData.down = _kbs.down;
+            _send = true;
         }
 
         private void SendData(object sender, EventArgs e)
@@ -91,18 +101,23 @@ namespace VirtualIoT
         {
             _usbData = new UsbData()
             {
-                x = 750,
-                y = 500,
+                x = 0,
+                y = 0,
                 mb = 0,
                 scroll = 0,
-                key = 0
+                key = 0,
+                down = false
             };
             _globalHook.MouseUpExt += HandleMouseUpExt;
             _globalHook.MouseDownExt += HandleMouseDownExt;
             _globalHook.MouseMoveExt += HandleMouseMove;
-            _globalHook.KeyPress += HandleKeyPress;
+            //_globalHook.KeyPress += HandleKeyPress;
             _usbTimer.Start();
             _send = true;
+            
+            _kbs = new KeyboardSender();
+            _kbs.KeyEvent += kbs_KeyEvent;
+            _kbs.Start(2); //time interval (ms)
         }
 
         private void HandleMouseDownExt(object sender, MouseEventExtArgs e)
