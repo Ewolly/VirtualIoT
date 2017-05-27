@@ -14,7 +14,6 @@ namespace VirtualIoT
 {
     public class AudioRead
     {
-
         private IWaveIn _waveIn;
         private LameMP3FileWriter _writer;
         private bool _isRecording = false;
@@ -96,9 +95,13 @@ namespace VirtualIoT
             get { return true; }
         }
 
-        public override long Length => throw new NotImplementedException();
+        public override long Length { get { throw new NotImplementedException(); } }
 
-        public override long Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override long Position
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
 
         public override void Flush()
         {

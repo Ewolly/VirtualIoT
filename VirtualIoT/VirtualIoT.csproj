@@ -82,6 +82,7 @@
     <Compile Include="InfraredForm.Designer.cs">
       <DependentUpon>InfraredForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="KeyboardSender.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

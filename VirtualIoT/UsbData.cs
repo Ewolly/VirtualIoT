@@ -31,6 +31,9 @@ namespace VirtualIoT
         public byte key { get; set; }
 
         [Key(5)]
+        public bool down { get; set; }
+        
+        [Key(6)]
         public string eof = "<EOF>";
 
 
