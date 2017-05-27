@@ -34,10 +34,9 @@ namespace VirtualIoT
         private bool _recieveLock;
         private bool _micLock;
         private bool _speakerLock;
-        private bool _startRecordingLock = true;
-        private bool _startPlaybackLock = true;
+        private bool _startRecordingLock = false;
+        private bool _startPlaybackLock = false;
         public AudioRead _audioRead = new AudioRead();
-        public AudioWrite _audioWrite = new AudioWrite();
         private FixedSizedQueue<byte[]> SendQueue = new FixedSizedQueue<byte[]>(32);
         private FixedSizedQueue<byte[]> RecieveQueue = new FixedSizedQueue<byte[]>(32);
 
@@ -61,15 +60,13 @@ namespace VirtualIoT
             if (_speakerLock)
             {
                 _recieveLock = false;
-                var buffer = new byte[65536];
-                int byteCount = 0;
+                var buffer = new byte[512];
                 _sslClient.ReadTimeout = 1;
                 try
                 {
-                    //while (!Encoding.UTF8.GetString(buffer).Contains("<EOF>"))
-                    _sslClient.Read(buffer, byteCount, 65536-byteCount);
-                    // outputTxtBox.AppendText(Encoding.UTF8.GetString(buffer));
-                    // _recieve = MessagePackSerializer.Deserialize<AudioMsgPack>(buffer);
+                    _sslClient.Read(buffer, 0, 512);
+                    outputTxtBox.AppendText(Encoding.UTF8.GetString(buffer));
+                    _recieve = MessagePackSerializer.Deserialize<AudioMsgPack>(buffer);
                 }
                 catch
                 {
@@ -80,15 +77,15 @@ namespace VirtualIoT
                     _sslClient.ReadTimeout = -1;
                 }
                     
-                //MicConCb.Checked = _sendLock = _recieve.mic;  // enables sending of data if dan requests mic
-                //SpeakConCb.Checked = _recieveLock = _recieve.speaker; // if dan requests speaker set _recieve lock true
-                //if (_recieveLock && _speakerLock)    // enters here if dan requests it and speaker enabled
+                _sendLock = _recieve.mic;  // enables sending of data if dan requests mic
+                _recieveLock = _recieve.speaker; // if dan requests speaker set _recieve lock true
+                if (_recieveLock && _speakerLock)    // enters here if dan requests it and speaker enabled
                 {
-                    //RecieveQueue.Enqueue(_recieve.mp3);  // maybe make this only do this if it isnt locked?
+                    RecieveQueue.Enqueue(_recieve.mp3);  // maybe make this only do this if it isnt locked?
                     if (_startPlaybackLock) // only want to start playback once for the request
                     {
                         _startPlaybackLock = false;
-                        _audioWrite.StartPlayback(_sslStream);
+                        _audioRead.StartRecording(RecieveQueue);
                     }
 
                 }
@@ -143,7 +140,7 @@ namespace VirtualIoT
             _checkRespTimer.Tick += UpdateResponseBox;
             _checkRespTimer.Start();
 
-            var server = new TcpListener(IPAddress.Parse("192.168.0.201"), 12345);
+            var server = new TcpListener(IPAddress.Any, 12345);
             server.Start();
             var port = ((IPEndPoint)server.LocalEndpoint).Port;
             var tcpClient = new TcpClient();
