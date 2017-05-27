@@ -12,30 +12,31 @@ using System.Threading;
 
 namespace VirtualIoT
 {
-    class AudioWrite
+    public class AudioWrite
     {
-        private bool _isPlayback = false;
+        private MemoryStream _inStream = null;
 
         private Stream ms = new MemoryStream();
-        public void StreamMp3(object sslStream)
+        public void StreamMp3(object unused)
         {
-            Stream stream = (Stream)sslStream;
             new Thread(delegate (object o)
             {
                 byte[] buffer = new byte[65536]; // 64KB chunks
                 int read;
-                while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                _inStream.Position = 0;
+                while ((read = _inStream.Read(buffer, 0, buffer.Length)) > 0)
                 {
                     var pos = ms.Position;
                     ms.Position = ms.Length;
                     ms.Write(buffer, 0, read);
                     ms.Position = pos;
                 }
+                _inStream.Position = 0;
             }).Start();
 
             // Pre-buffering some data to allow NAudio to start playing
-            while (ms.Length < 65536 * 10)
-                Thread.Sleep(1000);
+            while (ms.Length < 200)
+                Thread.Sleep(100);
 
             ms.Position = 0;
             using (WaveStream blockAlignedStream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(new Mp3FileReader(ms))))
@@ -46,19 +47,20 @@ namespace VirtualIoT
                     waveOut.Play();
                     while (waveOut.PlaybackState == PlaybackState.Playing)
                     {
-                        System.Threading.Thread.Sleep(100);
+                        Thread.Sleep(100);
                     }
                 }
             }
         }
 
-        public void StartPlayback(SslStream sslStream)
+        public MemoryStream StartPlayback()
         {
-            var waveOut = new WaveOutEvent();
-            if (_isPlayback)
-                return;
+            if (_inStream != null)
+                return _inStream;
 
-            ThreadPool.QueueUserWorkItem(StreamMp3, sslStream);
+            _inStream = new MemoryStream();
+            ThreadPool.QueueUserWorkItem(StreamMp3);
+            return _inStream;
         }
     }
 }

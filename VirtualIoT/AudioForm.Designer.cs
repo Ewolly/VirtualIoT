@@ -43,9 +43,10 @@
             // micCb
             // 
             this.micCb.AutoSize = true;
-            this.micCb.Location = new System.Drawing.Point(30, 39);
+            this.micCb.Location = new System.Drawing.Point(80, 93);
+            this.micCb.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.micCb.Name = "micCb";
-            this.micCb.Size = new System.Drawing.Size(82, 17);
+            this.micCb.Size = new System.Drawing.Size(202, 36);
             this.micCb.TabIndex = 0;
             this.micCb.Text = "Microphone";
             this.micCb.UseVisualStyleBackColor = true;
@@ -54,9 +55,10 @@
             // speakerCb
             // 
             this.speakerCb.AutoSize = true;
-            this.speakerCb.Location = new System.Drawing.Point(30, 73);
+            this.speakerCb.Location = new System.Drawing.Point(80, 174);
+            this.speakerCb.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.speakerCb.Name = "speakerCb";
-            this.speakerCb.Size = new System.Drawing.Size(66, 17);
+            this.speakerCb.Size = new System.Drawing.Size(159, 36);
             this.speakerCb.TabIndex = 0;
             this.speakerCb.Text = "Speaker";
             this.speakerCb.UseVisualStyleBackColor = true;
@@ -65,36 +67,39 @@
             // currentLbl
             // 
             this.currentLbl.AutoSize = true;
-            this.currentLbl.Location = new System.Drawing.Point(228, 244);
+            this.currentLbl.Location = new System.Drawing.Point(608, 582);
+            this.currentLbl.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.currentLbl.Name = "currentLbl";
-            this.currentLbl.Size = new System.Drawing.Size(72, 13);
+            this.currentLbl.Size = new System.Drawing.Size(189, 32);
             this.currentLbl.TabIndex = 5;
             this.currentLbl.Text = "Current Draw:";
             this.currentLbl.Click += new System.EventHandler(this.currentLbl_Click);
             // 
             // currentHsb
             // 
-            this.currentHsb.Location = new System.Drawing.Point(103, 208);
+            this.currentHsb.Location = new System.Drawing.Point(275, 496);
             this.currentHsb.Maximum = 1009;
             this.currentHsb.Name = "currentHsb";
-            this.currentHsb.Size = new System.Drawing.Size(328, 17);
+            this.currentHsb.Size = new System.Drawing.Size(875, 17);
             this.currentHsb.TabIndex = 4;
             this.currentHsb.Scroll += new System.Windows.Forms.ScrollEventHandler(this.currentHsb_Scroll);
             // 
             // outputTxtBox
             // 
-            this.outputTxtBox.Location = new System.Drawing.Point(13, 297);
+            this.outputTxtBox.Location = new System.Drawing.Point(35, 708);
+            this.outputTxtBox.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.outputTxtBox.Multiline = true;
             this.outputTxtBox.Name = "outputTxtBox";
             this.outputTxtBox.ReadOnly = true;
-            this.outputTxtBox.Size = new System.Drawing.Size(512, 88);
+            this.outputTxtBox.Size = new System.Drawing.Size(1359, 204);
             this.outputTxtBox.TabIndex = 6;
             // 
             // sendCommandBtn
             // 
-            this.sendCommandBtn.Location = new System.Drawing.Point(450, 269);
+            this.sendCommandBtn.Location = new System.Drawing.Point(1200, 641);
+            this.sendCommandBtn.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.sendCommandBtn.Name = "sendCommandBtn";
-            this.sendCommandBtn.Size = new System.Drawing.Size(75, 23);
+            this.sendCommandBtn.Size = new System.Drawing.Size(200, 55);
             this.sendCommandBtn.TabIndex = 7;
             this.sendCommandBtn.Text = "Send";
             this.sendCommandBtn.UseVisualStyleBackColor = true;
@@ -102,26 +107,29 @@
             // 
             // inputTxtBox
             // 
-            this.inputTxtBox.Location = new System.Drawing.Point(13, 271);
+            this.inputTxtBox.Location = new System.Drawing.Point(35, 646);
+            this.inputTxtBox.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.inputTxtBox.Name = "inputTxtBox";
-            this.inputTxtBox.Size = new System.Drawing.Size(430, 20);
+            this.inputTxtBox.Size = new System.Drawing.Size(1140, 38);
             this.inputTxtBox.TabIndex = 8;
             // 
             // statusLbl
             // 
             this.statusLbl.AutoSize = true;
-            this.statusLbl.Location = new System.Drawing.Point(13, 252);
+            this.statusLbl.Location = new System.Drawing.Point(35, 601);
+            this.statusLbl.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.statusLbl.Name = "statusLbl";
-            this.statusLbl.Size = new System.Drawing.Size(40, 13);
+            this.statusLbl.Size = new System.Drawing.Size(104, 32);
             this.statusLbl.TabIndex = 9;
             this.statusLbl.Text = "Status:";
             // 
             // MicConCb
             // 
             this.MicConCb.AutoSize = true;
-            this.MicConCb.Location = new System.Drawing.Point(293, 39);
+            this.MicConCb.Location = new System.Drawing.Point(781, 93);
+            this.MicConCb.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.MicConCb.Name = "MicConCb";
-            this.MicConCb.Size = new System.Drawing.Size(137, 17);
+            this.MicConCb.Size = new System.Drawing.Size(347, 36);
             this.MicConCb.TabIndex = 0;
             this.MicConCb.Text = "Microphone Connected";
             this.MicConCb.UseVisualStyleBackColor = true;
@@ -130,18 +138,19 @@
             // 
             this.SpeakConCb.AutoCheck = false;
             this.SpeakConCb.AutoSize = true;
-            this.SpeakConCb.Location = new System.Drawing.Point(293, 73);
+            this.SpeakConCb.Location = new System.Drawing.Point(781, 174);
+            this.SpeakConCb.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.SpeakConCb.Name = "SpeakConCb";
-            this.SpeakConCb.Size = new System.Drawing.Size(121, 17);
+            this.SpeakConCb.Size = new System.Drawing.Size(304, 36);
             this.SpeakConCb.TabIndex = 0;
             this.SpeakConCb.Text = "Speaker Connected";
             this.SpeakConCb.UseVisualStyleBackColor = true;
             // 
             // AudioForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(537, 397);
+            this.ClientSize = new System.Drawing.Size(1432, 947);
             this.Controls.Add(this.statusLbl);
             this.Controls.Add(this.inputTxtBox);
             this.Controls.Add(this.sendCommandBtn);
@@ -152,6 +161,7 @@
             this.Controls.Add(this.MicConCb);
             this.Controls.Add(this.speakerCb);
             this.Controls.Add(this.micCb);
+            this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.Name = "AudioForm";
             this.Text = "AudioEmulate";
             this.Load += new System.EventHandler(this.AudioEmulate_Load);

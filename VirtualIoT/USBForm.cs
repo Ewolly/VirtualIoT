@@ -163,7 +163,6 @@ namespace VirtualIoT
 
         public static string GetLocalIPAddress()
         {
-            string localIP;
             using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
             {
                 socket.Connect("8.8.8.8", 65530);
