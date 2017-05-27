@@ -144,8 +144,8 @@ namespace VirtualIoT
 
         private void HandleMouseMove(object sender, MouseEventExtArgs e)
         {
-            _usbData.x = e.X;
-            _usbData.y = e.Y;
+            _usbData.x = Math.Min((e.X * 10000) / Screen.PrimaryScreen.Bounds.Width, 10000); //mouseX normallized to 10000, maxed at primary screen
+            _usbData.y = Math.Min((e.Y * 10000) / Screen.PrimaryScreen.Bounds.Height, 10000); //mouseY normallized to 10000, maxed at primary screen
             _send = true;
         }
 
