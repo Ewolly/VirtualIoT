@@ -36,7 +36,14 @@ namespace VirtualIoT
             _usbTimer = new Timer();
             _usbTimer.Interval = 5;
             _usbTimer.Tick += SendData;
+            _usbTimer.Tick += SetFocus;
 
+        }
+
+        private void SetFocus(object sender, EventArgs e)
+        {
+            if (!this.Focused)
+                this.Activate();
         }
 
         private void kbs_KeyEvent(object sender, EventArgs e)
@@ -163,7 +170,6 @@ namespace VirtualIoT
 
         public static string GetLocalIPAddress()
         {
-            string localIP;
             using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
             {
                 socket.Connect("8.8.8.8", 65530);
@@ -236,6 +242,5 @@ namespace VirtualIoT
                 statusLbl.Text = Encoding.UTF8.GetString(buffer);
             }
         }
-
     }
 }
