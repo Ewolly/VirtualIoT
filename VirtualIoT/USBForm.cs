@@ -59,8 +59,19 @@ namespace VirtualIoT
             if (_send)
             {
                 _send = false;
-                var dataToSend = MessagePackSerializer.Serialize(_usbData);
-                _sslClient.Write(dataToSend, 0, dataToSend.Length);
+                try
+                {
+                    var dataToSend = MessagePackSerializer.Serialize(_usbData);
+                    _sslClient.Write(dataToSend, 0, dataToSend.Length);
+                }
+                catch
+                {
+                    UnsubscribeEvents();
+                    _sslClient.Dispose();
+                    _sslStream.Dispose();
+                    this.Close();
+                }
+                
             }
         }
 

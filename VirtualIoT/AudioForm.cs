@@ -284,6 +284,7 @@ namespace VirtualIoT
 
         private void PlayAudio()
         {
+
             while (_receiving)
             {
                 while (_inStream.Length < 4000)
@@ -307,6 +308,7 @@ namespace VirtualIoT
                 }
             }
         }
+            
 
         private void OnDataAvailable(object sender, WaveInEventArgs e)
         {
