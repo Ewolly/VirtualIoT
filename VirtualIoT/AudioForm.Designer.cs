@@ -28,41 +28,43 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.micCb = new System.Windows.Forms.CheckBox();
-            this.speakerCb = new System.Windows.Forms.CheckBox();
+            this.receiveChkBox = new System.Windows.Forms.CheckBox();
+            this.sendChkBox = new System.Windows.Forms.CheckBox();
             this.currentLbl = new System.Windows.Forms.Label();
             this.currentHsb = new System.Windows.Forms.HScrollBar();
             this.outputTxtBox = new System.Windows.Forms.TextBox();
             this.sendCommandBtn = new System.Windows.Forms.Button();
             this.inputTxtBox = new System.Windows.Forms.TextBox();
             this.statusLbl = new System.Windows.Forms.Label();
-            this.MicConCb = new System.Windows.Forms.CheckBox();
-            this.SpeakConCb = new System.Windows.Forms.CheckBox();
+            this.willReceiveChkBox = new System.Windows.Forms.CheckBox();
+            this.willSendChkBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
-            // micCb
+            // receiveChkBox
             // 
-            this.micCb.AutoSize = true;
-            this.micCb.Location = new System.Drawing.Point(80, 93);
-            this.micCb.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.micCb.Name = "micCb";
-            this.micCb.Size = new System.Drawing.Size(202, 36);
-            this.micCb.TabIndex = 0;
-            this.micCb.Text = "Microphone";
-            this.micCb.UseVisualStyleBackColor = true;
-            this.micCb.CheckedChanged += new System.EventHandler(this.micCb_CheckedChanged);
+            this.receiveChkBox.AutoSize = true;
+            this.receiveChkBox.Enabled = false;
+            this.receiveChkBox.Location = new System.Drawing.Point(80, 93);
+            this.receiveChkBox.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.receiveChkBox.Name = "receiveChkBox";
+            this.receiveChkBox.Size = new System.Drawing.Size(156, 36);
+            this.receiveChkBox.TabIndex = 0;
+            this.receiveChkBox.Text = "Receive";
+            this.receiveChkBox.UseVisualStyleBackColor = true;
+            this.receiveChkBox.CheckedChanged += new System.EventHandler(this.checkboxChangedAsync);
             // 
-            // speakerCb
+            // sendChkBox
             // 
-            this.speakerCb.AutoSize = true;
-            this.speakerCb.Location = new System.Drawing.Point(80, 174);
-            this.speakerCb.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.speakerCb.Name = "speakerCb";
-            this.speakerCb.Size = new System.Drawing.Size(159, 36);
-            this.speakerCb.TabIndex = 0;
-            this.speakerCb.Text = "Speaker";
-            this.speakerCb.UseVisualStyleBackColor = true;
-            this.speakerCb.CheckedChanged += new System.EventHandler(this.speakerCb_CheckedChanged);
+            this.sendChkBox.AutoSize = true;
+            this.sendChkBox.Enabled = false;
+            this.sendChkBox.Location = new System.Drawing.Point(80, 174);
+            this.sendChkBox.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.sendChkBox.Name = "sendChkBox";
+            this.sendChkBox.Size = new System.Drawing.Size(120, 36);
+            this.sendChkBox.TabIndex = 0;
+            this.sendChkBox.Text = "Send";
+            this.sendChkBox.UseVisualStyleBackColor = true;
+            this.sendChkBox.CheckedChanged += new System.EventHandler(this.checkboxChangedAsync);
             // 
             // currentLbl
             // 
@@ -73,7 +75,6 @@
             this.currentLbl.Size = new System.Drawing.Size(189, 32);
             this.currentLbl.TabIndex = 5;
             this.currentLbl.Text = "Current Draw:";
-            this.currentLbl.Click += new System.EventHandler(this.currentLbl_Click);
             // 
             // currentHsb
             // 
@@ -123,28 +124,32 @@
             this.statusLbl.TabIndex = 9;
             this.statusLbl.Text = "Status:";
             // 
-            // MicConCb
+            // willReceiveChkBox
             // 
-            this.MicConCb.AutoSize = true;
-            this.MicConCb.Location = new System.Drawing.Point(781, 93);
-            this.MicConCb.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.MicConCb.Name = "MicConCb";
-            this.MicConCb.Size = new System.Drawing.Size(347, 36);
-            this.MicConCb.TabIndex = 0;
-            this.MicConCb.Text = "Microphone Connected";
-            this.MicConCb.UseVisualStyleBackColor = true;
+            this.willReceiveChkBox.AutoSize = true;
+            this.willReceiveChkBox.Enabled = false;
+            this.willReceiveChkBox.Location = new System.Drawing.Point(778, 174);
+            this.willReceiveChkBox.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.willReceiveChkBox.Name = "willReceiveChkBox";
+            this.willReceiveChkBox.Size = new System.Drawing.Size(210, 36);
+            this.willReceiveChkBox.TabIndex = 0;
+            this.willReceiveChkBox.Text = "Will Receive";
+            this.willReceiveChkBox.UseVisualStyleBackColor = true;
+            this.willReceiveChkBox.CheckedChanged += new System.EventHandler(this.checkboxChangedAsync);
             // 
-            // SpeakConCb
+            // willSendChkBox
             // 
-            this.SpeakConCb.AutoCheck = false;
-            this.SpeakConCb.AutoSize = true;
-            this.SpeakConCb.Location = new System.Drawing.Point(781, 174);
-            this.SpeakConCb.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.SpeakConCb.Name = "SpeakConCb";
-            this.SpeakConCb.Size = new System.Drawing.Size(304, 36);
-            this.SpeakConCb.TabIndex = 0;
-            this.SpeakConCb.Text = "Speaker Connected";
-            this.SpeakConCb.UseVisualStyleBackColor = true;
+            this.willSendChkBox.AutoCheck = false;
+            this.willSendChkBox.AutoSize = true;
+            this.willSendChkBox.Enabled = false;
+            this.willSendChkBox.Location = new System.Drawing.Point(778, 93);
+            this.willSendChkBox.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.willSendChkBox.Name = "willSendChkBox";
+            this.willSendChkBox.Size = new System.Drawing.Size(174, 36);
+            this.willSendChkBox.TabIndex = 0;
+            this.willSendChkBox.Text = "Will Send";
+            this.willSendChkBox.UseVisualStyleBackColor = true;
+            this.willSendChkBox.CheckedChanged += new System.EventHandler(this.checkboxChangedAsync);
             // 
             // AudioForm
             // 
@@ -157,10 +162,10 @@
             this.Controls.Add(this.outputTxtBox);
             this.Controls.Add(this.currentLbl);
             this.Controls.Add(this.currentHsb);
-            this.Controls.Add(this.SpeakConCb);
-            this.Controls.Add(this.MicConCb);
-            this.Controls.Add(this.speakerCb);
-            this.Controls.Add(this.micCb);
+            this.Controls.Add(this.willSendChkBox);
+            this.Controls.Add(this.willReceiveChkBox);
+            this.Controls.Add(this.sendChkBox);
+            this.Controls.Add(this.receiveChkBox);
             this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.Name = "AudioForm";
             this.Text = "AudioEmulate";
@@ -172,15 +177,15 @@
 
         #endregion
 
-        private System.Windows.Forms.CheckBox micCb;
-        private System.Windows.Forms.CheckBox speakerCb;
+        private System.Windows.Forms.CheckBox receiveChkBox;
+        private System.Windows.Forms.CheckBox sendChkBox;
         private System.Windows.Forms.Label currentLbl;
         private System.Windows.Forms.HScrollBar currentHsb;
         private System.Windows.Forms.TextBox outputTxtBox;
         private System.Windows.Forms.Button sendCommandBtn;
         private System.Windows.Forms.TextBox inputTxtBox;
         private System.Windows.Forms.Label statusLbl;
-        private System.Windows.Forms.CheckBox MicConCb;
-        private System.Windows.Forms.CheckBox SpeakConCb;
+        private System.Windows.Forms.CheckBox willReceiveChkBox;
+        private System.Windows.Forms.CheckBox willSendChkBox;
     }
 }
