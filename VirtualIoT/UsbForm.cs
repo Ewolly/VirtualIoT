@@ -92,6 +92,11 @@ namespace VirtualIoT
 
             _globalHook = Hook.GlobalEvents();
             _kbs = new KeyboardSender();
+
+            _device.ConvertAndSend(_sslStream, new ResponseObject
+            {
+                response = "power_state",
+            });
         }
 
         private void currentHsb_Scroll(object sender, ScrollEventArgs e)
@@ -176,6 +181,11 @@ namespace VirtualIoT
         {
             try
             {
+                if (powerCb.Checked == false)
+                {
+                    currentHsb.Value = 0;
+                    currentLbl.Text = "Current: " + currentHsb.Value + "mA";
+                }
                 _device.SendKeepalive(_sslStream, currentHsb.Value);
             }
             catch
@@ -251,13 +261,11 @@ namespace VirtualIoT
                     catch
                     {
                         textBox1.AppendText("server setup failed");
-                        return;
-                    }
-                    finally
-                    {
                         _sslClient.Dispose();
                         _sslClient = null;
+                        return;
                     }
+
                     textBox1.AppendText("Connected new client: "+ Environment.NewLine + tcpClient.Client.RemoteEndPoint + Environment.NewLine);
                     SubscribeEvents();
                 }
