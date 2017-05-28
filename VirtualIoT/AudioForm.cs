@@ -1,10 +1,6 @@
 ﻿using MessagePack;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
@@ -12,10 +8,9 @@ using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using VirtualIoT.Properties;
-using System.Collections;
+using System.IO;
 
 namespace VirtualIoT
 {
@@ -28,19 +23,11 @@ namespace VirtualIoT
         private Timer _audioTimer;
         private SslStream _sslClient;
         public X509Certificate2 _cert = new X509Certificate2(Resources.server, "IoTBox");
-        public AudioMsgPack _recieve;
+        public AudioMsgPack _receive;
         public AudioMsgPack _send;
-        private bool _sendLock;
-        private bool _recieveLock;
-        private bool _micLock;
-        private bool _speakerLock;
-        private bool _startRecordingLock = true;
-        private bool _startPlaybackLock = true;
         public AudioRead _audioRead = new AudioRead();
         public AudioWrite _audioWrite = new AudioWrite();
-        private FixedSizedQueue<byte[]> SendQueue = new FixedSizedQueue<byte[]>(32);
-        private FixedSizedQueue<byte[]> RecieveQueue = new FixedSizedQueue<byte[]>(32);
-
+        private MemoryStream _inStream = null;
 
         public AudioForm(DeviceInfo device)
         {
@@ -58,66 +45,64 @@ namespace VirtualIoT
 
         private void RecieveData(object sender, EventArgs e)
         {
-            if (_speakerLock)
+            int readLen = 0;
+            byte[] readBytes = new byte[65536];
+            do
             {
-                _recieveLock = false;
-                var buffer = new byte[65536];
-                int byteCount = 0;
-                _sslClient.ReadTimeout = 1;
-                try
-                {
-                    //while (!Encoding.UTF8.GetString(buffer).Contains("<EOF>"))
-                    _sslClient.Read(buffer, byteCount, 65536-byteCount);
-                    // outputTxtBox.AppendText(Encoding.UTF8.GetString(buffer));
-                    // _recieve = MessagePackSerializer.Deserialize<AudioMsgPack>(buffer);
-                }
-                catch
-                {
-                    return;
-                }
-                finally
-                {
-                    _sslClient.ReadTimeout = -1;
-                }
-                    
-                //MicConCb.Checked = _sendLock = _recieve.mic;  // enables sending of data if dan requests mic
-                //SpeakConCb.Checked = _recieveLock = _recieve.speaker; // if dan requests speaker set _recieve lock true
-                //if (_recieveLock && _speakerLock)    // enters here if dan requests it and speaker enabled
-                {
-                    //RecieveQueue.Enqueue(_recieve.mp3);  // maybe make this only do this if it isnt locked?
-                    if (_startPlaybackLock) // only want to start playback once for the request
-                    {
-                        _startPlaybackLock = false;
-                        _audioWrite.StartPlayback(_sslStream);
-                    }
+                readLen += _sslClient.Read(readBytes, readLen, readBytes.Length - readLen);
+                if (Encoding.UTF8.GetString(readBytes.Take(readLen).ToArray()).Contains("<EOF>"))
+                    break;
+            } while (readLen > 0);
+            
+            if (readLen <= 0)
+            {
+                Console.WriteLine("dont know how we got here tbh");
+                return;
+            }
 
+            _receive = MessagePackSerializer.Deserialize<AudioMsgPack>(readBytes.Take(readLen).ToArray());
+            SpeakConCb.Checked = _receive.speaker;
+            MicConCb.Checked = _receive.mic;
+
+            if (SpeakConCb.Checked && speakerCb.Checked)
+            {
+                if (_inStream == null) // only want to start playback once for the request
+                {
+                    _inStream = _audioWrite.StartPlayback();
+                    outputTxtBox.AppendText("started playback");
+                }
+
+                if (_receive.mp3 != null)
+                {
+                    var pos = _inStream.Position;
+                    _inStream.Position = _inStream.Length;
+                    _inStream.Write(_receive.mp3, 0, _receive.mp3.Length);
+                    _inStream.Position = pos;
                 }
             }
         }
 
         private void SendData(object sender, EventArgs e)
         {
-            if (_micLock && _sendLock)  //if mic is "plugged in" will allow sending
-            {   
-                if (_startRecordingLock) // only want to start recording once for the request
-                {
-                    _startRecordingLock = false;
-                    _audioRead.StartRecording(SendQueue);
-                }
-                _send.mic = micCb.Checked;
-                _send.speaker = micCb.Checked;
-                byte[] mp3;
-                bool success = SendQueue.TryDequeue(out mp3);
-                if (success)
-                {
-                    _send.mp3 = mp3;
-                    _sendLock = false;
-                    var dataToSend = MessagePackSerializer.Serialize(_send);
-                    _sslClient.Write(dataToSend, 0, dataToSend.Length);
-                }
-
-                
-            }
+            //if (_micLock && _sendLock)  //if mic is "plugged in" will allow sending
+            //{   
+            //    if (_startRecordingLock) // only want to start recording once for the request
+            //    {
+            //        _startRecordingLock = false;
+            //        _audioRead.StartRecording(SendQueue);
+            //    }
+            //    _send.mic = micCb.Checked;
+            //    _send.speaker = micCb.Checked;
+            //    byte[] mp3;
+            //    bool success = SendQueue.TryDequeue(out mp3);
+            //    if (success)
+            //    {
+            //        _send.mp3 = mp3;
+            //        _sendLock = false;
+            //        var dataToSend = MessagePackSerializer.Serialize(_send);
+            //        _sslClient.Write(dataToSend, 0, dataToSend.Length);
+            //    }
+            //}
         }
 
         private void AudioEmulate_Load(object sender, EventArgs e)
@@ -143,25 +128,17 @@ namespace VirtualIoT
             _checkRespTimer.Tick += UpdateResponseBox;
             _checkRespTimer.Start();
 
-            var server = new TcpListener(IPAddress.Parse("192.168.0.201"), 12345);
+            /* delete htis */
+            var server = new TcpListener(IPAddress.Any, 12345);
             server.Start();
             var port = ((IPEndPoint)server.LocalEndpoint).Port;
             var tcpClient = new TcpClient();
             outputTxtBox.AppendText("Waiting for new Client");
-            //_device.ConvertAndSend(_sslStream, new ResponseObject
-            //{
-            //    response = "server_setup",
-            //    kwargs = new Dictionary<string, object>
-            //{
-            //    { "ip" , GetLocalIPAddress() },
-            //    { "port" , port }
-            //}
-            //});
             tcpClient = server.AcceptTcpClient();
             _sslClient = new SslStream(tcpClient.GetStream(), false);
             _sslClient.AuthenticateAsServer(_cert, false, SslProtocols.Tls, true);
             outputTxtBox.AppendText("Connected new client: " + tcpClient.Client.RemoteEndPoint);
-
+            /* delete htis */
         }
 
         private void UpdateResponseBox(object sender, EventArgs e)
@@ -187,7 +164,6 @@ namespace VirtualIoT
 
             if (result.server != null)
             {
-                Console.WriteLine(result.server);
                 if (_sslClient == null)
                 {
                     // put ssl tcp server start code here
@@ -280,26 +256,10 @@ namespace VirtualIoT
 
         private void micCb_CheckedChanged(object sender, EventArgs e)
         {
-            if(micCb.Checked == true)
-            {
-                _micLock = true;
-            }
-            else
-            {
-                _micLock = false;
-            }
         }
 
         private void speakerCb_CheckedChanged(object sender, EventArgs e)
         {
-            if (speakerCb.Checked == true)
-            {
-                _speakerLock = true;
-            }
-            else
-            {
-                _speakerLock = false;
-            }
         }
     }
 }

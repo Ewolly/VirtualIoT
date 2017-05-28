@@ -19,33 +19,5 @@ namespace VirtualIoT
 
         [Key(2)]
         public byte[] mp3 { get; set; }
-
-        [Key(3)]
-        public string end = "<EOF>";
-    }
-
-    public class FixedSizedQueue<T> : ConcurrentQueue<T>
-    {
-        private readonly object syncObject = new object();
-
-        public int Size { get; private set; }
-
-        public FixedSizedQueue(int size)
-        {
-            Size = size;
-        }
-
-        public new void Enqueue(T obj)
-        {
-            base.Enqueue(obj);
-            lock (syncObject)
-            {
-                while (base.Count > Size)
-                {
-                    T outObj;
-                    base.TryDequeue(out outObj);
-                }
-            }
-        }
     }
 }
