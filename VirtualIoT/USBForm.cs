@@ -91,6 +91,7 @@ namespace VirtualIoT
             _aliveTimer.Start();
 
             _globalHook = Hook.GlobalEvents();
+            _kbs = new KeyboardSender();
         }
 
         private void currentHsb_Scroll(object sender, ScrollEventArgs e)
@@ -122,9 +123,17 @@ namespace VirtualIoT
             _usbTimer.Start();
             _send = true;
             
-            _kbs = new KeyboardSender();
             _kbs.KeyEvent += kbs_KeyEvent;
             _kbs.Start(2); //time interval (ms)
+        }
+
+        public void UnsubscribeEvents()
+        {
+            _globalHook.MouseUpExt -= HandleMouseUpExt;
+            _globalHook.MouseDownExt -= HandleMouseDownExt;
+            _globalHook.MouseMoveExt -= HandleMouseMove;
+            _usbTimer.Stop();
+            _kbs.Stop();
         }
 
         private void HandleMouseDownExt(object sender, MouseEventExtArgs e)
@@ -165,7 +174,20 @@ namespace VirtualIoT
 
         private void aliveTimer(object sender, EventArgs e)
         {
-            _device.SendKeepalive(_sslStream, currentHsb.Value);
+            try
+            {
+                _device.SendKeepalive(_sslStream, currentHsb.Value);
+            }
+            catch
+            {
+                statusLbl.Text = "connection lost";
+                UnsubscribeEvents();
+                _sslStream.Close();
+                _sslClient.Close();
+                _sslStream.Dispose();
+                _sslClient.Dispose();
+                this.Close();
+            }
         }
 
         public static string GetLocalIPAddress()
@@ -203,16 +225,14 @@ namespace VirtualIoT
             if (result.server != null)
             {
                 Console.WriteLine(result.server);
-                if (_sslClient == null)
-                {
-                    // put ssl tcp server start code here
-                    // equivalent of start button
+                if (result.server == "USB" && _sslClient == null)
+                {   
 
                     var server = new TcpListener(IPAddress.Any, 0);
                     server.Start();
                     var port = ((IPEndPoint)server.LocalEndpoint).Port;
                     var tcpClient = new TcpClient();
-                    textBox1.AppendText("Waiting for new Client");
+                    textBox1.AppendText("Waiting for new Client" + Environment.NewLine);
                     _device.ConvertAndSend(_sslStream, new ResponseObject
                     {
                         response = "server_setup",
@@ -222,11 +242,36 @@ namespace VirtualIoT
                         { "port" , port }
                     }
                     });
-                    tcpClient = server.AcceptTcpClient();
-                    _sslClient = new SslStream(tcpClient.GetStream(), false);
-                    _sslClient.AuthenticateAsServer(_cert, false, SslProtocols.Tls, true);
-                    textBox1.AppendText("Connected new client: " + tcpClient.Client.RemoteEndPoint);
+                    try
+                    {
+                        tcpClient = server.AcceptTcpClient();
+                        _sslClient = new SslStream(tcpClient.GetStream(), false);
+                        _sslClient.AuthenticateAsServer(_cert, false, SslProtocols.Tls, true);
+                    }
+                    catch
+                    {
+                        textBox1.AppendText("server setup failed");
+                        return;
+                    }
+                    finally
+                    {
+                        _sslClient.Dispose();
+                        _sslClient = null;
+                    }
+                    textBox1.AppendText("Connected new client: "+ Environment.NewLine + tcpClient.Client.RemoteEndPoint + Environment.NewLine);
                     SubscribeEvents();
+                }
+                else if (result.server == "stop" && _sslClient != null)
+                {
+                    UnsubscribeEvents();
+                    _sslClient.Close();
+                    _sslClient.Dispose();
+                    _sslClient = null;
+                    textBox1.AppendText("connection closed" + Environment.NewLine);
+                    _device.ConvertAndSend(_sslStream, new ResponseObject
+                    {
+                        response = "server_stopped"
+                    });
                 }
             }
             else if (result.info != null)
@@ -236,6 +281,14 @@ namespace VirtualIoT
             else if (result.error != null)
             {
                 statusLbl.Text = "Error: " + result.error;
+            }
+            else if (result.power == null)
+            {
+                powerCb.Checked = false;
+            }
+            else if (result.power != null)
+            {
+                powerCb.Checked = true;
             }
             else
             {

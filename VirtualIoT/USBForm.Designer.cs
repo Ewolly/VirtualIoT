@@ -32,12 +32,13 @@
             this.currentHsb = new System.Windows.Forms.HScrollBar();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.statusLbl = new System.Windows.Forms.Label();
+            this.powerCb = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // currentLbl
             // 
             this.currentLbl.AutoSize = true;
-            this.currentLbl.Location = new System.Drawing.Point(230, 283);
+            this.currentLbl.Location = new System.Drawing.Point(221, 324);
             this.currentLbl.Name = "currentLbl";
             this.currentLbl.Size = new System.Drawing.Size(72, 13);
             this.currentLbl.TabIndex = 5;
@@ -46,7 +47,7 @@
             // 
             // currentHsb
             // 
-            this.currentHsb.Location = new System.Drawing.Point(107, 242);
+            this.currentHsb.Location = new System.Drawing.Point(98, 283);
             this.currentHsb.Maximum = 1009;
             this.currentHsb.Name = "currentHsb";
             this.currentHsb.Size = new System.Drawing.Size(328, 17);
@@ -55,9 +56,10 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(88, 139);
+            this.textBox1.Location = new System.Drawing.Point(31, 53);
+            this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(334, 20);
+            this.textBox1.Size = new System.Drawing.Size(472, 213);
             this.textBox1.TabIndex = 7;
             // 
             // statusLbl
@@ -69,11 +71,24 @@
             this.statusLbl.TabIndex = 8;
             this.statusLbl.Text = "Status:";
             // 
+            // powerCb
+            // 
+            this.powerCb.AutoCheck = false;
+            this.powerCb.AutoSize = true;
+            this.powerCb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.powerCb.Location = new System.Drawing.Point(431, 12);
+            this.powerCb.Name = "powerCb";
+            this.powerCb.Size = new System.Drawing.Size(72, 24);
+            this.powerCb.TabIndex = 9;
+            this.powerCb.Text = "Power";
+            this.powerCb.UseVisualStyleBackColor = true;
+            // 
             // UsbForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(532, 360);
+            this.Controls.Add(this.powerCb);
             this.Controls.Add(this.statusLbl);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.currentLbl);
@@ -92,5 +107,6 @@
         private System.Windows.Forms.HScrollBar currentHsb;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label statusLbl;
+        private System.Windows.Forms.CheckBox powerCb;
     }
 }

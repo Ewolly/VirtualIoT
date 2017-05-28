@@ -69,7 +69,7 @@ namespace VirtualIoT
             deviceCb.Items.AddRange(JsonConvert.DeserializeObject<string[]>(jsonStr));
             
             //
-            // Temp VAribales Below so we dont have to clog up jamies precious database constantly
+            // Temp Varibales Below so we dont have to clog up jamies precious database constantly
             //
             var device1 = new DeviceInfo()
             {
@@ -109,7 +109,7 @@ namespace VirtualIoT
             RegisteredDevicesCb.Items.Add(device4.FriendlyName);
             _devices.Add(device4);
             //
-            // Temp VAribales above so we dont have to clog up jamies precious database constantly
+            // Temp Varibales above so we dont have to clog up jamies precious database constantly
             //
         }
 

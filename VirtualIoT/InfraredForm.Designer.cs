@@ -36,20 +36,22 @@
             this.currentHsb = new System.Windows.Forms.HScrollBar();
             this.currentLbl = new System.Windows.Forms.Label();
             this.statusLbl = new System.Windows.Forms.Label();
+            this.powerCb = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // outputTb
             // 
-            this.outputTb.Location = new System.Drawing.Point(52, 53);
+            this.outputTb.Location = new System.Drawing.Point(52, 75);
             this.outputTb.Name = "outputTb";
             this.outputTb.ReadOnly = true;
             this.outputTb.Size = new System.Drawing.Size(379, 20);
             this.outputTb.TabIndex = 0;
+            this.outputTb.TextChanged += new System.EventHandler(this.outputTb_TextChanged);
             // 
             // feedback1Cb
             // 
             this.feedback1Cb.Appearance = System.Windows.Forms.Appearance.Button;
-            this.feedback1Cb.Location = new System.Drawing.Point(52, 79);
+            this.feedback1Cb.Location = new System.Drawing.Point(52, 101);
             this.feedback1Cb.Name = "feedback1Cb";
             this.feedback1Cb.Size = new System.Drawing.Size(91, 24);
             this.feedback1Cb.TabIndex = 1;
@@ -60,7 +62,7 @@
             // feedback2Cb
             // 
             this.feedback2Cb.Appearance = System.Windows.Forms.Appearance.Button;
-            this.feedback2Cb.Location = new System.Drawing.Point(149, 79);
+            this.feedback2Cb.Location = new System.Drawing.Point(149, 101);
             this.feedback2Cb.Name = "feedback2Cb";
             this.feedback2Cb.Size = new System.Drawing.Size(93, 24);
             this.feedback2Cb.TabIndex = 1;
@@ -71,7 +73,7 @@
             // feedback3Cb
             // 
             this.feedback3Cb.Appearance = System.Windows.Forms.Appearance.Button;
-            this.feedback3Cb.Location = new System.Drawing.Point(248, 79);
+            this.feedback3Cb.Location = new System.Drawing.Point(248, 101);
             this.feedback3Cb.Name = "feedback3Cb";
             this.feedback3Cb.Size = new System.Drawing.Size(92, 24);
             this.feedback3Cb.TabIndex = 1;
@@ -82,7 +84,7 @@
             // feedback4Cb
             // 
             this.feedback4Cb.Appearance = System.Windows.Forms.Appearance.Button;
-            this.feedback4Cb.Location = new System.Drawing.Point(346, 79);
+            this.feedback4Cb.Location = new System.Drawing.Point(346, 101);
             this.feedback4Cb.Name = "feedback4Cb";
             this.feedback4Cb.Size = new System.Drawing.Size(85, 24);
             this.feedback4Cb.TabIndex = 1;
@@ -118,11 +120,24 @@
             this.statusLbl.TabIndex = 4;
             this.statusLbl.Text = "label1";
             // 
+            // powerCb
+            // 
+            this.powerCb.AutoCheck = false;
+            this.powerCb.AutoSize = true;
+            this.powerCb.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.powerCb.Location = new System.Drawing.Point(359, 26);
+            this.powerCb.Name = "powerCb";
+            this.powerCb.Size = new System.Drawing.Size(72, 24);
+            this.powerCb.TabIndex = 5;
+            this.powerCb.Text = "Power";
+            this.powerCb.UseVisualStyleBackColor = true;
+            // 
             // InfraredForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(489, 304);
+            this.Controls.Add(this.powerCb);
             this.Controls.Add(this.statusLbl);
             this.Controls.Add(this.currentLbl);
             this.Controls.Add(this.currentHsb);
@@ -150,5 +165,6 @@
         private System.Windows.Forms.HScrollBar currentHsb;
         private System.Windows.Forms.Label currentLbl;
         private System.Windows.Forms.Label statusLbl;
+        private System.Windows.Forms.CheckBox powerCb;
     }
 }

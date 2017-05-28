@@ -101,6 +101,14 @@ namespace VirtualIoT
                 {
                     statusLbl.Text = "Error: " + result.error;
                 }
+                else if (result.power == null)
+                {
+                    powerCb.Checked = false;
+                }
+                else if (result.power != null)
+                {
+                    powerCb.Checked = true;
+                }
                 else
                 {
                 
@@ -129,6 +137,11 @@ namespace VirtualIoT
             };
 
             _device.SendIRFeedback(_sslStream, feedbackArr);
+        }
+
+        private void outputTb_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
