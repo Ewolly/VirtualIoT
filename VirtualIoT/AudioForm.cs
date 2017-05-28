@@ -62,18 +62,6 @@ namespace VirtualIoT
             };
             _checkRespTimer.Tick += UpdateResponseBox;
             _checkRespTimer.Start();
-
-            var server = new TcpListener(IPAddress.Any, 12345);
-            server.Start();
-            var port = ((IPEndPoint)server.LocalEndpoint).Port;
-            var tcpClient = new TcpClient();
-            outputTxtBox.AppendText("Waiting for new Client" + Environment.NewLine);
-            tcpClient = server.AcceptTcpClient();
-            _sslClient = new SslStream(tcpClient.GetStream(), false);
-            _sslClient.AuthenticateAsServer(_cert, false, SslProtocols.Tls, true);
-            outputTxtBox.AppendText("Connected new client: " + tcpClient.Client.RemoteEndPoint + Environment.NewLine);
-
-            ReceiveData();
         }
 
         private void UpdateResponseBox(object sender, EventArgs e)
@@ -97,6 +85,7 @@ namespace VirtualIoT
                 return;
 
             if (result.server != null)
+            {
                 if (_sslClient == null)
                 {
                     var server = new TcpListener(IPAddress.Any, 0);
@@ -120,13 +109,23 @@ namespace VirtualIoT
 
                     ReceiveData();
                 }
-            
+            }
             else if (result.info != null)
+            {
                 statusLbl.Text = "Info: " + result.info;
+            }
             else if (result.error != null)
+            {
                 statusLbl.Text = "Error: " + result.error;
+            }
+            else if (result.power != null)
+            {
+                powerCb.Checked = result.power.Value;
+            }
             else
+            {
                 statusLbl.Text = Encoding.UTF8.GetString(buffer);
+            }
         }
 
         private async void ReceiveData()
