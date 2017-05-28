@@ -60,6 +60,11 @@ namespace VirtualIoT
                 else
                     feedbacks[i].Text = (i + 1).ToString();
             }
+
+            _device.ConvertAndSend(_sslStream, new ResponseObject
+            {
+                response = "power_state",
+            });
         }
 
         private void currentHsb_Scroll(object sender, ScrollEventArgs e)
@@ -119,7 +124,22 @@ namespace VirtualIoT
         }
         private void aliveTimer(object sender, EventArgs e)
         {
-            _device.SendKeepalive(_sslStream, currentHsb.Value);
+            try
+            {
+                if (powerCb.Checked == false)
+                {
+                    currentHsb.Value = 0;
+                    currentLbl.Text = "Current: " + currentHsb.Value + "mA";
+                }
+                _device.SendKeepalive(_sslStream, currentHsb.Value);
+            }
+            catch
+            {
+                statusLbl.Text = "connection lost";
+                _sslStream.Close();
+                _sslStream.Dispose();
+                this.Close();
+            }
         }
 
         private void feedbackCb_CheckedChanged(object sender, EventArgs e)

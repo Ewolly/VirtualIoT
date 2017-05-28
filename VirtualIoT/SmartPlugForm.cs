@@ -50,12 +50,22 @@ namespace VirtualIoT
             _timer.Tick += UpdateTimer;
             _timer.Start();
 
+            _device.ConvertAndSend(_sslStream, new ResponseObject
+            {
+                response = "power_state",
+            });
+
         }
 
         private void aliveTimer(object sender, EventArgs e)
         {
             try
             {
+                if (powerCb.Checked == false)
+                {
+                    currentHsb.Value = 0;
+                    currentLbl.Text = "Current: " + currentHsb.Value + "mA";
+                }
                 _device.SendKeepalive(_sslStream, currentHsb.Value);
             }
             catch

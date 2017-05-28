@@ -62,6 +62,11 @@ namespace VirtualIoT
             };
             _checkRespTimer.Tick += UpdateResponseBox;
             _checkRespTimer.Start();
+
+            _device.ConvertAndSend(_sslStream, new ResponseObject
+            {
+                response = "power_state",
+            });
         }
 
         private void UpdateResponseBox(object sender, EventArgs e)

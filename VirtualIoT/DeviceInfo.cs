@@ -42,8 +42,10 @@ namespace VirtualIoT
             sslStream.Read(buffer, 0, buffer.Length);
             var response = JsonConvert.DeserializeObject<Dictionary<string, string>>(
                 Encoding.UTF8.GetString(buffer));
-            if(response.ContainsKey("info")) 
+            if (response.ContainsKey("info"))
+            {
                 return sslStream;
+            }
             return null;
         }
 
