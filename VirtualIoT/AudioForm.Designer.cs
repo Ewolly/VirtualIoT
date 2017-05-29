@@ -101,6 +101,7 @@
             // 
             // willReceiveChkBox
             // 
+            this.willReceiveChkBox.AutoCheck = false;
             this.willReceiveChkBox.AutoSize = true;
             this.willReceiveChkBox.Enabled = false;
             this.willReceiveChkBox.Location = new System.Drawing.Point(282, 63);
