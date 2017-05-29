@@ -323,5 +323,17 @@ namespace VirtualIoT
                 currentHsb.Enabled = true;
             }
         }
+
+        private void UsbForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _timer.Stop();
+            _aliveTimer.Stop();
+            statusLbl.Text = "connection lost";
+            UnsubscribeEvents();
+            _sslStream.Close();
+            _sslClient.Close();
+            _sslStream.Dispose();
+            _sslClient.Dispose();
+        }
     }
 }
