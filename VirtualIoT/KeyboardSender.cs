@@ -36,6 +36,7 @@ namespace VirtualIoT
         public void Stop()
         {
             _timer.Stop();
+
         }
 
         private void GetKeysState(object sender, EventArgs e)

@@ -329,11 +329,14 @@ namespace VirtualIoT
             _timer.Stop();
             _aliveTimer.Stop();
             statusLbl.Text = "connection lost";
-            UnsubscribeEvents();
             _sslStream.Close();
-            _sslClient.Close();
             _sslStream.Dispose();
-            _sslClient.Dispose();
+            if (_sslClient != null)
+            {
+                _sslClient.Close();
+                _sslClient.Dispose();
+                _sslClient = null;
+            }
         }
     }
 }
