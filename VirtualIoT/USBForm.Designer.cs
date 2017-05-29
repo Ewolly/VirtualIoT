@@ -82,6 +82,7 @@
             this.powerCb.TabIndex = 9;
             this.powerCb.Text = "Power";
             this.powerCb.UseVisualStyleBackColor = true;
+            this.powerCb.CheckedChanged += new System.EventHandler(this.powerCb_CheckedChanged);
             // 
             // UsbForm
             // 

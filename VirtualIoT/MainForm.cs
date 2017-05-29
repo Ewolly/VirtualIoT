@@ -73,32 +73,32 @@ namespace VirtualIoT
             //
             var device1 = new DeviceInfo()
             {
-                device_id = 71,
-                token = "80dcb628-9dea-46eb-aacc-1c5ee71230cd",
-                FriendlyName = "Jamieporno",
-                module_type = 7
+                device_id = 99,
+                token = "334d54f9-edec-4ff0-b7f6-3f6d4c4bad14",
+                FriendlyName = "Lamp -SmartPlug",
+                module_type = 1
             };
             var device2 = new DeviceInfo()
             {
-                device_id = 90,
-                token = "759666a2-ed14-4274-8a1f-071653fa9d2d",
-                FriendlyName = "JamiesTV",
-                device_url = "https://iot.duality.co.nz/api/1/device/90/info",
-                module_type = 4
+                device_id = 100,
+                token = "750ffb05-795d-4824-a2de-158381004dc5",
+                FriendlyName = "HID -USB",
+                module_type = 3
             };
             var device3 = new DeviceInfo()
             {
-                device_id = 92,
-                token = "0ad42527-69df-4927-bbe8-e8eba186636a",
-                FriendlyName = "JamiesLamp",
-                module_type = 1
+                device_id = 101,
+                token = "0ff742f8-d0a3-4299-a843-eb27f448bfe2",
+                FriendlyName = "TV - Infrared",
+                device_url = "https://iot.duality.co.nz/api/1/device/101/info",
+                module_type = 4
             };
             var device4 = new DeviceInfo()
             {
-                device_id = 91,
-                token = "2e903937-dc68-493c-b22f-7144a2ed0b61",
-                FriendlyName = "JamiesVibrator",
-                module_type = 3
+                device_id = 102,
+                token = "0bc52d55-93bd-42ab-ab8f-d54b198a634d",
+                FriendlyName = "Comms - Audio",
+                module_type = 7
             };
             RegisteredDevicesCb.Items.Add(device1.FriendlyName);
             _devices.Add(device1);

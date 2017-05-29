@@ -42,6 +42,8 @@ namespace VirtualIoT
 
         private void AudioEmulate_Load(object sender, EventArgs e)
         {
+            currentHsb.Enabled = false;
+
             _sslStream = _device.CreateSocket();
             if(_sslStream == null)
             {
@@ -227,6 +229,11 @@ namespace VirtualIoT
 
         private void UpdateTimer(object sender, EventArgs e)
         {
+            if (powerCb.Checked == false)
+            {
+                currentHsb.Value = 0;
+                currentLbl.Text = "Current: " + currentHsb.Value + "mA";
+            }
             _device.SendKeepalive(_sslStream, currentHsb.Value);
         }
 
@@ -313,6 +320,18 @@ namespace VirtualIoT
         private void OnDataAvailable(object sender, WaveInEventArgs e)
         {
             _writer.Write(e.Buffer, 0, e.BytesRecorded);
+        }
+
+        private void powerCb_CheckedChanged(object sender, EventArgs e)
+        {
+            if (powerCb.Checked == false)
+            {
+                currentHsb.Enabled = false;
+            }
+            else
+            {
+                currentHsb.Enabled = true;
+            }
         }
     }
 

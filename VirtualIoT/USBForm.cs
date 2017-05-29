@@ -77,6 +77,7 @@ namespace VirtualIoT
 
         private void USB_Load(object sender, EventArgs e)
         {
+            currentHsb.Enabled = false;
 
             _sslStream = _device.CreateSocket();
             if (_sslStream == null)
@@ -308,6 +309,18 @@ namespace VirtualIoT
             else
             {
                 statusLbl.Text = Encoding.UTF8.GetString(buffer);
+            }
+        }
+
+        private void powerCb_CheckedChanged(object sender, EventArgs e)
+        {
+            if (powerCb.Checked == false)
+            {
+                currentHsb.Enabled = false;
+            }
+            else
+            {
+                currentHsb.Enabled = true;
             }
         }
     }

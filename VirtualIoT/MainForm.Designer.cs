@@ -64,7 +64,7 @@
             this.emailTb.Name = "emailTb";
             this.emailTb.Size = new System.Drawing.Size(121, 20);
             this.emailTb.TabIndex = 3;
-            this.emailTb.Text = "hunter3@example.com";
+            this.emailTb.Text = "hunter4@example.com";
             this.emailTb.TextChanged += new System.EventHandler(this.emailTb_TextChanged);
             // 
             // emailStatusLbl

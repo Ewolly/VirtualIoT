@@ -131,6 +131,7 @@
             this.powerCb.TabIndex = 5;
             this.powerCb.Text = "Power";
             this.powerCb.UseVisualStyleBackColor = true;
+            this.powerCb.CheckedChanged += new System.EventHandler(this.powerCb_CheckedChanged);
             // 
             // InfraredForm
             // 

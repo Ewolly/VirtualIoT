@@ -27,13 +27,15 @@ namespace VirtualIoT
 
         private async void Infrared_Load(object sender, EventArgs e)
         {
+            currentHsb.Enabled = false;
+
             _sslStream = _device.CreateSocket();
             if (_sslStream == null)
             {
                 MessageBox.Show("Connection Failed");
                 this.Close();
             }
-            var result = await _serverComm.GetAsync(_device.device_url, "hunter3@example.com", "12345678");
+            var result = await _serverComm.GetAsync(_device.device_url, "hunter4@example.com", "12345678");
             var jsonStr = await result.Item2.Content.ReadAsStringAsync();
             _device = JsonConvert.DeserializeObject<DeviceInfo>(jsonStr);
 
@@ -158,6 +160,18 @@ namespace VirtualIoT
         private void outputTb_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void powerCb_CheckedChanged(object sender, EventArgs e)
+        {
+            if(powerCb.Checked == false)
+            {
+                currentHsb.Enabled = false;
+            }
+            else
+            {
+                currentHsb.Enabled = true;
+            }
         }
     }
 }

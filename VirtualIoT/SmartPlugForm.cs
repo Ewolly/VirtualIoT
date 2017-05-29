@@ -28,6 +28,8 @@ namespace VirtualIoT
 
         private void SmartPlug_Load(object sender, EventArgs e)
         {
+            currentHsb.Enabled = false;
+
             _sslStream = _device.CreateSocket();
             if (_sslStream == null)
             {
@@ -120,6 +122,18 @@ namespace VirtualIoT
         private void currentLbl_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void powerCb_CheckedChanged(object sender, EventArgs e)
+        {
+            if (powerCb.Checked == false)
+            {
+                currentHsb.Enabled = false;
+            }
+            else
+            {
+                currentHsb.Enabled = true;
+            }
         }
     }
 }
