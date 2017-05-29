@@ -96,6 +96,7 @@
             this.Controls.Add(this.currentHsb);
             this.Name = "UsbForm";
             this.Text = "USB";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UsbForm_FormClosing);
             this.Load += new System.EventHandler(this.USB_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

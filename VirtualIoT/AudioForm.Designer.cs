@@ -33,8 +33,6 @@
             this.currentLbl = new System.Windows.Forms.Label();
             this.currentHsb = new System.Windows.Forms.HScrollBar();
             this.outputTxtBox = new System.Windows.Forms.TextBox();
-            this.sendCommandBtn = new System.Windows.Forms.Button();
-            this.inputTxtBox = new System.Windows.Forms.TextBox();
             this.statusLbl = new System.Windows.Forms.Label();
             this.willReceiveChkBox = new System.Windows.Forms.CheckBox();
             this.willSendChkBox = new System.Windows.Forms.CheckBox();
@@ -45,7 +43,7 @@
             // 
             this.receiveChkBox.AutoSize = true;
             this.receiveChkBox.Enabled = false;
-            this.receiveChkBox.Location = new System.Drawing.Point(26, 83);
+            this.receiveChkBox.Location = new System.Drawing.Point(20, 29);
             this.receiveChkBox.Name = "receiveChkBox";
             this.receiveChkBox.Size = new System.Drawing.Size(66, 17);
             this.receiveChkBox.TabIndex = 0;
@@ -57,7 +55,7 @@
             // 
             this.sendChkBox.AutoSize = true;
             this.sendChkBox.Enabled = false;
-            this.sendChkBox.Location = new System.Drawing.Point(26, 117);
+            this.sendChkBox.Location = new System.Drawing.Point(20, 63);
             this.sendChkBox.Name = "sendChkBox";
             this.sendChkBox.Size = new System.Drawing.Size(51, 17);
             this.sendChkBox.TabIndex = 0;
@@ -85,29 +83,12 @@
             // 
             // outputTxtBox
             // 
-            this.outputTxtBox.Location = new System.Drawing.Point(13, 297);
+            this.outputTxtBox.Location = new System.Drawing.Point(13, 268);
             this.outputTxtBox.Multiline = true;
             this.outputTxtBox.Name = "outputTxtBox";
             this.outputTxtBox.ReadOnly = true;
             this.outputTxtBox.Size = new System.Drawing.Size(512, 88);
             this.outputTxtBox.TabIndex = 6;
-            // 
-            // sendCommandBtn
-            // 
-            this.sendCommandBtn.Location = new System.Drawing.Point(450, 269);
-            this.sendCommandBtn.Name = "sendCommandBtn";
-            this.sendCommandBtn.Size = new System.Drawing.Size(75, 23);
-            this.sendCommandBtn.TabIndex = 7;
-            this.sendCommandBtn.Text = "Send";
-            this.sendCommandBtn.UseVisualStyleBackColor = true;
-            this.sendCommandBtn.Click += new System.EventHandler(this.sendCommandBtn_Click);
-            // 
-            // inputTxtBox
-            // 
-            this.inputTxtBox.Location = new System.Drawing.Point(13, 271);
-            this.inputTxtBox.Name = "inputTxtBox";
-            this.inputTxtBox.Size = new System.Drawing.Size(430, 20);
-            this.inputTxtBox.TabIndex = 8;
             // 
             // statusLbl
             // 
@@ -122,7 +103,7 @@
             // 
             this.willReceiveChkBox.AutoSize = true;
             this.willReceiveChkBox.Enabled = false;
-            this.willReceiveChkBox.Location = new System.Drawing.Point(288, 117);
+            this.willReceiveChkBox.Location = new System.Drawing.Point(282, 63);
             this.willReceiveChkBox.Name = "willReceiveChkBox";
             this.willReceiveChkBox.Size = new System.Drawing.Size(86, 17);
             this.willReceiveChkBox.TabIndex = 0;
@@ -135,7 +116,7 @@
             this.willSendChkBox.AutoCheck = false;
             this.willSendChkBox.AutoSize = true;
             this.willSendChkBox.Enabled = false;
-            this.willSendChkBox.Location = new System.Drawing.Point(288, 83);
+            this.willSendChkBox.Location = new System.Drawing.Point(282, 29);
             this.willSendChkBox.Name = "willSendChkBox";
             this.willSendChkBox.Size = new System.Drawing.Size(71, 17);
             this.willSendChkBox.TabIndex = 0;
@@ -160,11 +141,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(537, 397);
+            this.ClientSize = new System.Drawing.Size(537, 364);
             this.Controls.Add(this.powerCb);
             this.Controls.Add(this.statusLbl);
-            this.Controls.Add(this.inputTxtBox);
-            this.Controls.Add(this.sendCommandBtn);
             this.Controls.Add(this.outputTxtBox);
             this.Controls.Add(this.currentLbl);
             this.Controls.Add(this.currentHsb);
@@ -174,6 +153,7 @@
             this.Controls.Add(this.receiveChkBox);
             this.Name = "AudioForm";
             this.Text = "AudioEmulate";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AudioForm_FormClosing);
             this.Load += new System.EventHandler(this.AudioEmulate_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -187,8 +167,6 @@
         private System.Windows.Forms.Label currentLbl;
         private System.Windows.Forms.HScrollBar currentHsb;
         private System.Windows.Forms.TextBox outputTxtBox;
-        private System.Windows.Forms.Button sendCommandBtn;
-        private System.Windows.Forms.TextBox inputTxtBox;
         private System.Windows.Forms.Label statusLbl;
         private System.Windows.Forms.CheckBox willReceiveChkBox;
         private System.Windows.Forms.CheckBox willSendChkBox;

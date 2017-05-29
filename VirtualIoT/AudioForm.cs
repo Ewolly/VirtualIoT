@@ -214,18 +214,6 @@ namespace VirtualIoT
             currentLbl.Text = "Current: " + currentHsb.Value + "mA";
         }
 
-        private void sendCommandBtn_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                _sslStream.Write(Encoding.UTF8.GetBytes(inputTxtBox.Text + "\r\n"));
-            }
-            catch
-            {
-                MessageBox.Show("server is gone");
-                this.Close();
-            }
-        }
 
         private void UpdateTimer(object sender, EventArgs e)
         {
@@ -331,6 +319,20 @@ namespace VirtualIoT
             else
             {
                 currentHsb.Enabled = true;
+            }
+        }
+
+        private void AudioForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _timer.Stop();
+            _checkRespTimer.Stop();
+            statusLbl.Text = "connection lost";
+            _sslStream.Close();
+            _sslStream.Dispose();
+            if (_sslClient != null)
+            {
+                _sslClient.Close();
+                _sslClient.Dispose();
             }
         }
     }

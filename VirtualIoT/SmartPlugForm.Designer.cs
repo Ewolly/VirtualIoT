@@ -86,6 +86,7 @@
             this.Controls.Add(this.currentHsb);
             this.Name = "SmartPlugForm";
             this.Text = "SmartPlug";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SmartPlugForm_FormClosing);
             this.Load += new System.EventHandler(this.SmartPlug_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

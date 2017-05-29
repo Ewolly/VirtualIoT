@@ -173,5 +173,14 @@ namespace VirtualIoT
                 currentHsb.Enabled = true;
             }
         }
+
+        private void InfraredForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _timer.Stop();
+            _aliveTimer.Stop();
+            statusLbl.Text = "connection lost";
+            _sslStream.Close();
+            _sslStream.Dispose();
+        }
     }
 }

@@ -150,6 +150,7 @@
             this.Name = "InfraredForm";
             this.Text = "Infrared";
             this.TransparencyKey = System.Drawing.Color.Fuchsia;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.InfraredForm_FormClosing);
             this.Load += new System.EventHandler(this.Infrared_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
