@@ -13,6 +13,7 @@ namespace VirtualIoT
         public bool? power { get; set; }
         public string server { get; set; }
         public object[] ir_button { get; set; }
+        public Dictionary<string, object>[] feedback { get; set; }
     }
 
     public class ActionObject

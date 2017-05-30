@@ -112,6 +112,19 @@ namespace VirtualIoT
                 {
                     powerCb.Checked = result.power.Value;
                 }
+                else if (result.feedback != null)
+                {
+                    var feedbacks = new List<CheckBox>() { feedback1Cb, feedback2Cb, feedback3Cb, feedback4Cb };
+                    for (int i = 0; i < 4; i++)
+                    {
+                        object name;
+                        if (result.feedback[i].TryGetValue("name", out name))
+                            feedbacks[i].Text = (string)name;
+                        else
+                            feedbacks[i].Text = (i + 1).ToString();
+                        feedbacks[i].Enabled = (bool)result.feedback[i]["enabled"];
+                    }
+                }
                 else
                 {
                 
