@@ -140,7 +140,14 @@ namespace VirtualIoT
             sendChkBox.Enabled = willReceiveChkBox.Enabled = true;
             receiveChkBox.Enabled = willSendChkBox.Enabled = true;
             while (_sslClient != null)
-                await ReceiveDataAsync();
+                try
+                {
+                    await ReceiveDataAsync();
+                }
+                catch
+                {
+                    return;
+                }
             sendChkBox.Enabled = willReceiveChkBox.Enabled = false;
             receiveChkBox.Enabled = willSendChkBox.Enabled = false;
         }
